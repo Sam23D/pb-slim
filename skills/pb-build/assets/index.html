@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-ui="basecoat">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App Name</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#2f4b8a">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <!-- Vendor files are local copies (see pb-design/references/basecoat.md). -->
+  <!-- <script src="/vendor/tailwind-browser-4.x/tailwind.js"></script> -->
+  <!-- <link rel="stylesheet" href="/vendor/basecoat-1.0.2/basecoat.cdn.min.css"> -->
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- <script defer src="/vendor/basecoat-1.0.2/basecoat.min.js"></script> -->
+  <!-- <script defer src="/vendor/pocketbase-0.26.0/pocketbase.umd.js"></script> -->
+  <script defer src="/js/outbox.js"></script>
+  <script defer src="/js/install.js"></script>
+  <script defer src="/js/app.js"></script>
+</head>
+<body>
+  <header>
+    <h1>App Name</h1>
+    <button id="install-app" class="btn" hidden>Install app</button>
+    <p id="install-help" hidden>On iPhone or iPad: tap Share, then "Add to Home Screen".</p>
+  </header>
+
+  <main>
+    <p id="sync-status" role="status"></p>
+    <!-- v1 screens go here -->
+  </main>
+
+  <div id="toaster" class="toaster"></div>
+</body>
+</html>
