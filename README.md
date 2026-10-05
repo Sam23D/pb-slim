@@ -1,0 +1,70 @@
+# PB Slim
+
+Agent skills that turn an AI coding agent into a product partner for **non-engineering PMs**. Describe an app idea in plain words. The agent ships a small **installable, offline-first web app** on [PocketBase](https://pocketbase.io), with no frontend framework or build step.
+
+- **Installable:** every app is a PWA with an "Install app" button on the site. No app stores.
+- **Offline first:** each feature is built in two phases. Phase 1 works fully offline and is tested. Phase 2 adds sync and live updates.
+- **Boring stack:** one PocketBase process, plain HTML/CSS/JS, [Basecoat UI](https://basecoatui.com) components, SQLite on disk.
+- **Personality per product:** Basecoat gives the solid SaaS base. Each product adds its own theme, one signature element, and voice.
+- **Spec before build:** the agent writes a living spec (v1 floor + later ceiling), reviews it in ship / cut / later, and builds only when asked.
+
+The skills follow the open [Agent Skills](https://agentskills.io/specification) format, so they work in any agent that reads `SKILL.md` folders.
+
+## Skills
+
+| Skill | Job |
+|---|---|
+| `pb-slim` | Entry point: persona, how to talk to a PM, the fixed stack, which skill to use next |
+| `pb-spec` | Discovery, the living spec (two phases, look & feel), as-built PRD |
+| `pb-review` | Read-only review: ship / cut / later; UX audit |
+| `pb-build` | New app scaffold, phase 1 (offline) → test → phase 2 (sync + live), demo script |
+| `pb-design` | Basecoat base + per-product theme, signature, voice |
+| `pb-deploy` | Putting the app online: one always-on server, files, backups, email, HTTPS |
+
+## Install
+
+Copy or symlink the folders in `skills/` into your agent's skills directory.
+
+```sh
+git clone <this-repo> ~/pb-slim
+```
+
+| Agent | Command |
+|---|---|
+| Claude Code (user) | `ln -s ~/pb-slim/skills/* ~/.claude/skills/` |
+| Claude Code (project) | `mkdir -p .claude/skills && ln -s ~/pb-slim/skills/* .claude/skills/` |
+| Codex / agents that read `.agents/skills` | `mkdir -p ~/.agents/skills && ln -s ~/pb-slim/skills/* ~/.agents/skills/` |
+| Hermes | add `~/pb-slim/skills` to `skills.external_dirs` in `config.yaml`, or `ln -s ~/pb-slim/skills/* ~/.hermes/skills/` |
+| OpenCode | `ln -s ~/pb-slim/skills/* ~/.config/opencode/skills/` (it also reads `.claude/skills`) |
+| Cursor | `mkdir -p .cursor/skills && ln -s ~/pb-slim/skills/* .cursor/skills/` |
+| Anything else | point the agent at `skills/<name>/SKILL.md`, or paste `AGENTS.md` into its instructions file |
+
+For the persona to apply in every turn, also copy `AGENTS.md` into your project. In Claude Code, add a `CLAUDE.md` with the line `@AGENTS.md`.
+
+Paths differ between agent versions. Check your agent's docs if a folder above does not load.
+
+## Optional companions
+
+- **impeccable** (design skill): if installed, `pb-design` uses it to write PRODUCT.md / DESIGN.md and to critique screens. Without it, `pb-design` uses its own templates.
+- **Node.js**: only for optional checks (`node --check` on scripts). The apps themselves need no Node.
+
+## Start
+
+> I want a simple app where [who] can [do one job]. Start me a blank app.
+
+## Layout
+
+```
+skills/
+  pb-slim/     SKILL.md
+  pb-spec/     SKILL.md, references/as-built-prd.md, assets/spec-template.md
+  pb-review/   SKILL.md, references/ux-audit.md
+  pb-build/    SKILL.md, references/{offline-first,realtime,pocketbase-jsvm,local-dev}.md,
+               assets/{manifest.webmanifest,sw.js,install.js,outbox.js,index.html}
+  pb-design/   SKILL.md, references/basecoat.md, assets/{theme.css,PRODUCT.md,DESIGN.md}
+  pb-deploy/   SKILL.md, references/hosting-and-storage.md
+```
+
+## License
+
+MIT. See `LICENSE`.
