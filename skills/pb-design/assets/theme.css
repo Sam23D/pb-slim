@@ -1,0 +1,56 @@
+/* theme.css — per-product personality on top of Basecoat.
+   Load after vendor/basecoat-<v>/basecoat.cdn.min.css. Values come from DESIGN.md.
+   Change values only; never restyle Basecoat components here. */
+
+@font-face {
+  font-family: "Product Sans";            /* self-hosted: pb_public/vendor/fonts/ */
+  src: url("../vendor/fonts/product-sans.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  /* Surfaces */
+  --background: oklch(0.985 0.004 250);
+  --foreground: oklch(0.22 0.02 250);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+
+  /* Brand */
+  --primary: oklch(0.45 0.12 250);        /* manifest theme_color */
+  --primary-foreground: oklch(0.98 0.01 250);
+  --secondary: oklch(0.95 0.01 250);
+  --secondary-foreground: var(--foreground);
+  --accent: oklch(0.94 0.02 250);
+  --accent-foreground: var(--foreground);
+  --muted: oklch(0.95 0.005 250);
+  --muted-foreground: oklch(0.45 0.02 250); /* keep ≥ 4.5:1 on --background */
+  --destructive: oklch(0.55 0.2 27);
+
+  /* Lines and focus */
+  --border: oklch(0.9 0.008 250);
+  --input: var(--border);
+  --ring: var(--primary);
+
+  /* Shape and type */
+  --radius: 0.5rem;
+  --font-sans: "Product Sans", system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+
+  /* Charts */
+  --chart-1: var(--primary);
+  --chart-2: oklch(0.6 0.12 160);
+  --chart-3: oklch(0.65 0.14 70);
+  --chart-4: oklch(0.55 0.15 320);
+  --chart-5: oklch(0.6 0.05 250);
+
+  /* Product meanings (examples) */
+  --signature: var(--primary);
+}
+
+/* Phone-friendly buttons */
+.btn { min-height: 2.5rem; }
+
+/* Depth strategy: borders, no shadows (delete if the product wants shadows) */
+.card { box-shadow: none; border: 1px solid var(--border); }
