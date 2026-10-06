@@ -4,7 +4,7 @@ description: Write or update the living product spec for a PB Slim (PocketBase) 
 license: MIT
 metadata:
   author: sam23d
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Spec
@@ -33,6 +33,7 @@ Write in **Simplified Technical English** (ASD-STE100 style): one short sentence
 - **Phase 2 — Online.** The outbox syncs to PocketBase when the connection returns. The spec names the **conflict rule** (default: last write wins per record — say who loses what). Screens that show shared data get live updates. **Test:** two devices; one goes offline, edits, comes back; both match. A change on device A appears on B without refresh.
 - Phase 2 never starts before phase 1 passes. Phase 1 must not paint phase 2 into a corner: records get their final id on the device from day one.
 - Name every screen that is an **exception** to offline-first (e.g. payment checkout) and why.
+- **Changes the server may refuse later** (a seat on a full team, a move after the game started): the conflict rule says what the user sees. Default: they go back to the old value and a short message says why ("Teams are locked once the game starts."). Typed text is never dropped; it stays as "could not be saved".
 
 ## 4. PM half (first in the file)
 
@@ -61,7 +62,14 @@ Write in **Simplified Technical English** (ASD-STE100 style): one short sentence
 
 **v1 quality bar:** if a section does not change what the user can *do* in the demo, it belongs in Later or Not now.
 
-## 6. After saving
+## 6. A new feature on a living spec
+
+- Add it as a new numbered section in the same file ("11. Feature: Teams"). Never a second spec.
+- The section holds: what it is, demo loop, rules, both phases, conflict rule, screens, acceptance per phase, later, not now.
+- Mark the section's state in its heading and in the file's status: SPEC → approved → phase 1 passed → phase 2 passed. Write "not checked yet" next to any acceptance step that has not run on the current release.
+- Record decisions with the default in **Decisions** (e.g. "4 per team; join goes to the smaller team").
+
+## 7. After saving
 
 5–8 line chat summary, the file path, then: "Want me to build v1, or change the cuts?" **Do not build.**
 

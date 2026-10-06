@@ -19,7 +19,7 @@ The skills follow the open [Agent Skills](https://agentskills.io/specification) 
 | `pb-review` | Read-only review: ship / cut / later; UX audit |
 | `pb-build` | New app scaffold, phase 1 (offline) → test → phase 2 (sync + live), demo script |
 | `pb-design` | Basecoat base + per-product theme, signature, voice |
-| `pb-deploy` | Putting the app online: one always-on server, files, backups, email, HTTPS |
+| `pb-deploy` | Putting the app online: one always-on server, files, backups, email, HTTPS; or a test link per pull request for throwaway data |
 
 ## Install
 
@@ -62,7 +62,7 @@ skills/
   pb-build/    SKILL.md, references/{offline-first,realtime,pocketbase-jsvm,local-dev}.md,
                assets/{manifest.webmanifest,sw.js,install.js,outbox.js,index.html}
   pb-design/   SKILL.md, references/basecoat.md, assets/{theme.css,PRODUCT.md,DESIGN.md}
-  pb-deploy/   SKILL.md, references/hosting-and-storage.md
+  pb-deploy/   SKILL.md, references/{hosting-and-storage,pr-test-links}.md
 ```
 
 ## License
