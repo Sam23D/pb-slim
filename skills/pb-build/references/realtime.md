@@ -78,6 +78,15 @@ Browser: `pb.realtime.subscribe('lists/' + id + '/presence', (data) => { /* patc
 
 Durable data (messages, cards, bills) belongs in a collection, not a custom topic: then rules, admin, and backups come free.
 
+## Presence ("who is here now") — what actually works (checked on 0.40)
+
+- Topic per room: `presence/<roomId>`. In `onRealtimeSubscribeRequest`, broadcast the room's online list (before and after `e.next()`) to clients that hold the topic **and** are members (`c.get("auth")` + a membership lookup). Strangers who subscribe get nothing and are not counted.
+- **Never hold `e.next()` in `onRealtimeConnectRequest` to detect disconnects.** It parks a JS runtime per open connection; with the default pool (15) the hooks starve and the "after" code did not run in testing.
+- Closing the app: the browser drops the SSE connection *before* a pagehide `POST /api/realtime` lands (404 "Missing or invalid client id"). Use a custom route instead: `routerAdd("POST", "/api/<app>/leave", …, $apis.requireAuth("<auth>"))` called with `fetch(…, {keepalive: true})` on `pagehide`; broadcast excluding that auth id.
+- Lost signal / killed app: `cronAdd("presence_sweep", "* * * * *", …)` rebroadcasts every watched room; dead connections are gone from `subscriptionsBroker().clients()` by then (Away within ~1 min).
+- Client: subscribe only while the screen that shows presence is open; unsubscribe on leave. Offline, hide online dots (the last list is stale).
+- Test with a raw-socket SSE client: `urllib` keeps the socket alive after `close()`, so a "disconnect" test passes or fails for the wrong reason.
+
 ## Antipatterns
 
 - Realtime everywhere; subscribe `'*'` with no filter on a large collection.
