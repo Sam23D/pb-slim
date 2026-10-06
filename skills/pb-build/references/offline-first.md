@@ -30,8 +30,10 @@ Starter files in `assets/`: `manifest.webmanifest`, `sw.js`, `install.js`, `outb
 |---|---|
 | `Local.all(col)` / `Local.get(col, id)` | Read from IndexedDB |
 | `Local.save(col, data)` | Put in IndexedDB, give a PocketBase-shaped id if new, add to outbox |
+| `Local.save(col, data, { snapBack: true })` | Same, for a change the server may refuse later (see phase 2) |
 | `Local.remove(col, id)` | Delete locally, add a delete to the outbox |
 | `Local.pending()` | Count of unsynced changes ("3 changes saved on this device") |
+| `Local.pendingIds(col)` | Ids still waiting to sync (e.g. "Friends can join once this saves") |
 
 - Set `DB_NAME` and `COLLECTIONS` at the top of `outbox.js`. Bump `DB_VERSION` when you add a collection.
 - Screens render from `Local`, never from `pb.collection(...)` directly. Listen for the `local:change` event to re-render.
@@ -56,9 +58,17 @@ pb.collection('items').subscribe('*', (e) => Local.applyRemote('items', e.action
 ```
 
 - `flush` sends each outbox item in order. Network error → stop and retry later. Validation or permission error → mark the item failed and show it to the user ("This change could not be saved: …"); do not drop it silently.
-- Create retried after a lost response → the id already exists → it updates instead. Update of a record the server never saw → it creates instead. Delete of a missing record → done.
+- Create retried after a lost response → the record already exists → that create is done. **Check with `getOne(id)`, not the error field**: PocketBase reports the first unique field that clashes (a lobby `code`), not always `id`; reading only `data.id` marked a synced lobby "could not be saved". Update of a record the server never saw → it creates instead. Delete of a missing record → done.
+- **Changes the server may refuse later** (a seat on a full team, a move after the game started): save with `{ snapBack: true }`. On a 4xx the outbox drops the item, the next pull restores the server copy, and `local:rejected` carries the server message for a toast ("Team not changed — Teams are locked once the game starts."). Plain saves keep refused items as failed so typed text is never lost. Pick per action in the spec's conflict rule.
 - `pull` replaces the local copy with the server list, **except** records that still have pending outbox items. Fine for small collections (hundreds to low thousands of rows per user). For more, pull with `filter: updated > lastSync` and use a soft-delete field.
 - **Conflict rule (default): last write wins** — the last device to sync overwrites. Say it in the spec. If the PM needs more (e.g. "don't overwrite a newer edit"), add a `client_updated` field and a hook that rejects older writes; failed items then show in the UI.
 - Live updates only on screens that show shared data. Realtime patches `Local` first, then the screen re-renders (`references/realtime.md`).
 
 **Phase 2 test:** two browsers, two members. A goes offline, edits, comes back; both match. A edits online; B sees it without refresh. Kill the network mid-sync; nothing is lost or duplicated.
+
+## Testing offline in a browser tool
+
+- DevTools offline (`Network.emulateNetworkConditions offline=true`) makes `fetch` fail with status 0, so outbox items stay queued. Check it took: `navigator.onLine === false` **and** a blocked `fetch('/api/health')`. Re-apply it after every reload; it does not survive one.
+- A "refused once back online" path (snap-back, failed item) runs only after the network returns. Test it in two steps: queue the change offline (phase 1 proves the queue), then make the server refuse it online (e.g. queue a team switch after Start) and watch for `local:rejected` and the toast.
+- Do not pause or stop the app's server to fake an outage: page requests hang and the tool times out, and it changes container state, so ask first.
+- Report a toast or snap-back as passed only from a run on the current release.

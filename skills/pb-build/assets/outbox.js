@@ -1,5 +1,5 @@
 // outbox.js — local-first data for PB Slim apps. No dependencies.
-// Phase 1: Local.all / get / save / remove / pending (works with no network).
+// Phase 1: Local.all / get / save / remove / pending / pendingIds (works with no network).
 // Phase 2: Local.flush(pb) / pull(pb, col, query) / applyRemote(col, action, record).
 (function () {
   var DB_NAME = 'app';          // one per app
@@ -80,15 +80,21 @@
     return result(db.transaction(col).objectStore(col).get(id));
   }
 
-  async function save(col, data) {
+  // opts.snapBack: for changes the server may refuse later (a full team, a started game).
+  // If the server refuses, drop the change, let the next pull bring the server copy back,
+  // and emit 'local:rejected' so the screen can say why. Without it, a refused change stays
+  // in the outbox marked failed, so nothing the user typed is lost.
+  async function save(col, data, opts) {
     var db = await open();
     var rec = Object.assign({}, data);
     var op = rec.id ? 'update' : 'create';
     if (!rec.id) rec.id = newId();
     rec._localAt = new Date().toISOString();
+    var item = { op: op, col: col, id: rec.id, data: payload(rec), at: rec._localAt };
+    if (opts && opts.snapBack) item.snapBack = true;
     var tx = db.transaction([col, 'outbox'], 'readwrite');
     tx.objectStore(col).put(rec);
-    tx.objectStore('outbox').add({ op: op, col: col, id: rec.id, data: payload(rec), at: rec._localAt });
+    tx.objectStore('outbox').add(item);
     await done(tx);
     emit();
     return rec;
@@ -108,16 +114,18 @@
     return items.filter(function (i) { return !i.failed; }).length;
   }
 
+  // Ids of records in this collection that still wait in the outbox ("saving…" badges).
+  async function pendingIds(col) {
+    var items = await outboxItems();
+    return new Set(items.filter(function (i) { return i.col === col && !i.failed; }).map(function (i) { return i.id; }));
+  }
+
   async function failed() {
     var items = await outboxItems();
     return items.filter(function (i) { return i.failed; });
   }
 
   // ---------- Phase 2 ----------
-
-  function idTaken(err) {
-    return err && err.status === 400 && err.response && err.response.data && err.response.data.id;
-  }
 
   async function push(pb, item) {
     var c = pb.collection(item.col);
@@ -127,9 +135,15 @@
     }
     if (item.op === 'create') {
       try { await c.create(Object.assign({ id: item.id }, item.data)); return; }
-      catch (err) { if (!idTaken(err)) throw err; }   // created before, response lost
-      await c.update(item.id, item.data);
-      return;
+      catch (err) {
+        if (err.status !== 400) throw err;
+        // Sent before and the reply was lost? Then the record is there and this create is
+        // done (later outbox items carry later edits). PocketBase names the first unique
+        // field that clashes (e.g. a code), not always the id, so look the record up.
+        try { await c.getOne(item.id); return; }
+        catch (e2) { if (e2.status !== 404) throw e2; }
+        throw err;                                     // a real refusal
+      }
     }
     try { await c.update(item.id, item.data); }
     catch (err) {
@@ -151,6 +165,16 @@
           await push(pb, item);
         } catch (err) {
           if (!err || !err.status) break;            // network: stop, retry later
+          if (item.snapBack && err.status >= 400 && err.status < 500) {
+            var rtx = db.transaction('outbox', 'readwrite');
+            rtx.objectStore('outbox').delete(item.seq); // the next pull restores the server copy
+            await done(rtx);
+            window.dispatchEvent(new CustomEvent('local:rejected', { detail: {
+              col: item.col, id: item.id, data: item.data,
+              message: (err.response && err.response.message) || err.message || '',
+            } }));
+            continue;
+          }
           item.failed = (err.response && err.response.message) || err.message || String(err.status);
           var ftx = db.transaction('outbox', 'readwrite');
           ftx.objectStore('outbox').put(item);       // keep it; show it to the user
@@ -214,7 +238,7 @@
 
   window.Local = {
     newId: newId,
-    all: all, get: get, save: save, remove: remove, pending: pending, failed: failed,
+    all: all, get: get, save: save, remove: remove, pending: pending, pendingIds: pendingIds, failed: failed,
     flush: flush, retry: retry, discard: discard, pull: pull, applyRemote: applyRemote,
   };
 })();

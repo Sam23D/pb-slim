@@ -85,7 +85,9 @@ Durable data (messages, cards, bills) belongs in a collection, not a custom topi
 - Closing the app: the browser drops the SSE connection *before* a pagehide `POST /api/realtime` lands (404 "Missing or invalid client id"). Use a custom route instead: `routerAdd("POST", "/api/<app>/leave", …, $apis.requireAuth("<auth>"))` called with `fetch(…, {keepalive: true})` on `pagehide`; broadcast excluding that auth id.
 - Lost signal / killed app: `cronAdd("presence_sweep", "* * * * *", …)` rebroadcasts every watched room; dead connections are gone from `subscriptionsBroker().clients()` by then (Away within ~1 min).
 - Client: subscribe only while the screen that shows presence is open; unsubscribe on leave. Offline, hide online dots (the last list is stale).
+- **A failed subscribe sticks.** The JS SDK keeps the listener even when the subscribe POST failed (a short blip), and it only resends subscriptions on a full reconnect. The SSE stream often survives the blip, so the server never hears about the topic: the badge stays on "3 players" with no online count and others see you as Away. Fix: on a failed `pb.realtime.subscribe(topic, …)`, call `pb.realtime.unsubscribe(topic)`; remember the wanted topic and retry after every sync (online, tab visible, `PB_CONNECT`). Test: open the presence screen while the network is off, come back, and expect the count within a second.
 - Test with a raw-socket SSE client: `urllib` keeps the socket alive after `close()`, so a "disconnect" test passes or fails for the wrong reason.
+- The one-minute sweep can resend an unchanged list at any moment. A test that expects "no message in this second" flakes; expect "no change" (no message, or the same list).
 
 ## Antipatterns
 

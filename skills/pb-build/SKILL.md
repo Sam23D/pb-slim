@@ -4,12 +4,12 @@ description: Scaffold and build PB Slim apps on one PocketBase process with plai
 license: MIT
 metadata:
   author: sam23d
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Build
 
-Persona and fixed stack: `pb-slim`. Build **only** what the approved spec calls v1.
+Persona and fixed stack: `pb-slim`. Build **only** what the approved spec calls v1, or the approved feature section. No file under `pb_hooks/`, `pb_migrations/`, or `pb_public/` before the yes: a running local server applies them on save.
 
 ## New app — done when a PM can click
 
@@ -28,8 +28,11 @@ README in human steps: start, open, install, admin, "data is saved on this machi
    - Report: "Phase 1 passes offline. Try it: …. Start phase 2 (sync + live)?" **Wait for yes.**
 2. **Phase 2 — online.** Outbox flush on reconnect, pull, the spec's conflict rule, realtime on shared screens. Recipes: `references/offline-first.md` (sync) and `references/realtime.md`.
    - Prove the two-device test yourself: two browsers, two members; one goes offline, edits, reconnects; both match; a change on A appears on B without refresh.
+   - Use a separate browser session per person, and run each multi-step flow in one call. If a session comes back blank, reopen it and recreate the state; do not reuse old ids.
+   - After any client change, check that an already-open tab moves to the new release by itself before you blame sync.
+   - Report a step as passed only from a run on the current release. Say "not checked yet" for the rest.
 3. **Demo script.** Install this, turn off wifi, click that, turn wifi on, expect this. Mention admin vs member if both exist.
-4. **Git (only if they use git).** When done, propose one batch of commits split by concern that covers every changed file. Wait for approval, then commit. No push unless asked.
+4. **Git (only if they use git).** When done, propose one batch of commits split by concern that covers every changed file. Wait for approval, then commit. No push unless asked. If the app has test links per pull request (`pb-deploy`), open the PR as a draft and put anything unchecked under **Open** in its description.
 
 If v1 cannot be demoed without a product decision, stop and ask. Never guess a payment provider, email vendor, or branding.
 
