@@ -1,5 +1,6 @@
 // sw.js — app shell cache. Data is NOT cached here; it lives in IndexedDB (outbox.js).
 // Bump VERSION on every release. List every vendor file in SHELL.
+// Also bump ?v=<release> on /css and /js links in the HTML (and here), or open tabs keep old code.
 const VERSION = 'app-v1';
 const SHELL = [
   '/',
@@ -20,7 +21,9 @@ const SHELL = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(VERSION).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting())
+    caches.open(VERSION)
+      .then((cache) => cache.addAll(SHELL.map((u) => new Request(u, { cache: 'reload' }))))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -49,7 +52,7 @@ self.addEventListener('fetch', (event) => {
   if (request.mode === 'navigate') {
     // Pages: network first, cached copy when offline.
     event.respondWith(
-      fetch(request)
+      fetch(request, { cache: 'no-cache' })
         .then((response) => store(request, response))
         .catch(() => caches.match(request).then((hit) => hit || caches.match('/index.html')))
     );

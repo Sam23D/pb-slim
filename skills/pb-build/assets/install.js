@@ -4,7 +4,22 @@
 //   <p id="install-help" hidden>On iPhone: tap Share, then "Add to Home Screen".</p>
 (function () {
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js'); });
+    var hadController = !!navigator.serviceWorker.controller;
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js').then(function (reg) {
+        // Hash-route tabs never navigate: check for a new release when the tab comes back.
+        document.addEventListener('visibilitychange', function () { if (!document.hidden) reg.update(); });
+        setInterval(function () { reg.update(); }, 30 * 60 * 1000);
+      });
+    });
+    // A new release took over: reload once so this tab runs the new code (data is in IndexedDB).
+    var reloading = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (!hadController) { hadController = true; return; }
+      if (reloading) return;
+      reloading = true;
+      location.reload();
+    });
   }
 
   var button = document.getElementById('install-app');

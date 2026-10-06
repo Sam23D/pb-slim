@@ -51,3 +51,11 @@ app.save(items)
 - `app.save(record)` inside after-create can fire after-update hooks. Guard against loops (skip if the derived row already exists).
 - `findRecordsByFilter(collection, filter, sort, limit, offset, params)`: sort is a string, params last.
 - Boot-time repair of derived rows is fine, but make it idempotent so restarts do not duplicate or spam reversals.
+
+## No-signup apps (guest per device)
+
+- An auth collection `guests`; the device makes the id + a random secret, signs up once, then signs in. Nobody types anything.
+- Share one sign-in promise. The first screen and the background sync both call it at startup; two parallel sign-ups make the second fail with "Value must be unique". Treat a 400 on create as "already made" and sign in.
+- "Find by link" rule: `code = @request.query.code` lets anyone with the exact code see one record, and nothing else.
+- Rules that check membership through another collection (`players_via_lobby.device ?= @request.auth.id`) fail for the creator until their own membership row syncs. Add an owner clause (`host_device = @request.auth.id`).
+- Status fields: let them only move forward in a hook (waiting → playing → closed), so a late offline sync cannot reopen a closed record.

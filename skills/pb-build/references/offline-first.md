@@ -16,6 +16,11 @@ Starter files in `assets/`: `manifest.webmanifest`, `sw.js`, `install.js`, `outb
 - Navigations: network first, fall back to the cached page.
 - Static files: cache first.
 - **Never cache `/api/` or `/_/`.** Data comes from IndexedDB, not the HTTP cache. Images from `/api/files/` therefore show a placeholder offline unless you store them in IndexedDB.
+- **Releases must reach open tabs.** Cache-first on unversioned `/js/app.js` keeps serving last release's code even after you bump `VERSION`: hash-route apps never navigate, so the new worker never loads and the old tab runs old code (a phase-2 build looked like "no lobby with this code" because the host tab was still phase-1 code that never synced). Fix, from the start:
+  - Put `?v=<release>` on every `/css` and `/js` link in the HTML, and the same list in the SW precache. Bump both per release.
+  - Precache with `new Request(url, { cache: 'reload' })`; fetch navigations with `{ cache: 'no-cache' }`.
+  - In `install.js`: `reg.update()` on `visibilitychange` (and every 30 min), and `location.reload()` once on `controllerchange` (skip the first install). Safe because data lives in IndexedDB.
+  - Before a PM test after a release, say "reload the open tab once" if the old tab predates this fix.
 
 ## Phase 1 — on the device
 
