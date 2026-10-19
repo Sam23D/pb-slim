@@ -2,6 +2,8 @@
 
 <One line: what this is and who it is for.>
 
+**Offline:** off.
+
 ## v1 (floor)
 
 Time to demo: <10> minutes.
@@ -10,11 +12,6 @@ Time to demo: <10> minutes.
 2. Sign up with email and password.
 3. <Click> …
 4. <Expected result> …
-
-## Phases
-
-- **After phase 1 (offline):** <what the user can do with no signal>.
-- **After phase 2 (online):** <what syncs; what appears live>.
 
 ## Look & feel
 
@@ -47,22 +44,15 @@ Time to demo: <10> minutes.
 
 ## Risks
 
-- Two people edit the same item offline. The last one to sync wins.
-- <Screen> needs a live connection. It does not work offline because <reason>.
+- If the server is off, you cannot save. Live lists freeze.
+- A refused write shows the old value and a short reason. Typed text is not dropped.
 
 ## Acceptance
 
-### Phase 1 — offline
-
-1. Install the app. Turn on airplane mode.
-2. <Do the happy path>. Expect "Saved on this device".
-3. Close and reopen the app. Expect the changes to still show.
-
-### Phase 2 — online
-
-1. Use two devices with two members.
-2. Device A goes offline and edits <item>. Device A goes online.
-3. Expect device B to show the edit without a refresh.
+1. Install the app.
+2. Do the happy path.
+3. Refresh. Expect the changes to still show.
+4. Turn the network off. Expect the installed app to open. Edits can wait until the network is back.
 
 ## Open questions
 
@@ -75,8 +65,8 @@ Time to demo: <10> minutes.
 - **Collections:** <name>: <fields>.
 - **Rules:** <collection>: members read; owner edits (`owner = @request.auth.id`).
 - **Screens:** `pb_public/<page>.html`, `pb_public/js/<page>.js`.
-- **Phase 1:** IndexedDB stores <…>; service worker caches shell + vendor; outbox; manifest; Install button.
-- **Phase 2:** sync order <…>; conflict rule <…>; live updates on <screens>.
+- **Install:** manifest; service worker caches shell + vendor; Install button.
+- **Data:** PocketBase directly. No outbox.
+- **Live updates:** <screens, or none>.
 - **Tasks:**
-  - Phase 1: …
-  - Phase 2: …
+  - …

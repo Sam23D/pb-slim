@@ -4,7 +4,7 @@ description: Put a PB Slim (PocketBase) app online and explain it to a non-engin
 license: MIT
 metadata:
   author: sam23d
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Online
@@ -21,7 +21,7 @@ Say which one you picked and why, in one line. Mixed apps keep production for th
 ## Explain as product ops
 
 - **One small computer that stays on.** Sleeping to save money breaks login, sync, and live lists.
-- **Losing the connection does not mean losing the app.** Users keep working on their device; changes sync when the connection returns.
+- **Losing the connection does not close the installed app.** It still opens. Edits need a connection unless the spec says Offline: on.
 - **Install needs HTTPS.** The Install button only appears on a real web address with a certificate.
 - **Data lives on that computer's disk.** Photos can stay there until they get large; then a cloud bucket — the app still controls who sees them.
 - **Backups are a second bucket**, not the same as photos.
@@ -56,7 +56,7 @@ Done when, on a real pull request (the drill in the reference):
 
 ## Done when (production)
 
-- The app opens on HTTPS, the Install button appears, the installed app opens in airplane mode.
+- The app opens on HTTPS, the Install button appears, the installed app opens in airplane mode (the shell). Data offline is required only when the spec says Offline: on.
 - An admin can sign in. Password-reset email arrives in the inbox.
 - A backup exists in its own bucket and the PM knows where.
 - Reply with: the URL, how to sign in as admin, the monthly cost, and what never to delete.

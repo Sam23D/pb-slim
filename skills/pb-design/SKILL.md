@@ -4,7 +4,7 @@ description: Give a PB Slim (PocketBase + Basecoat UI) app its own personality w
 license: MIT
 metadata:
   author: sam23d
-  version: "0.1.0"
+  version: "0.3.0"
 ---
 
 # Design: Basecoat base, product personality
@@ -17,7 +17,7 @@ Basecoat gives every app the same solid SaaS base. Personality comes from **thre
 
 1. **Theme** — colors, fonts, corner radius, borders vs shadows, density. Source: `DESIGN.md`. Output: `pb_public/css/theme.css`, overriding Basecoat's tokens (`assets/theme.css`). The manifest `theme_color` and `background_color` use the same values. Fonts are self-hosted in `pb_public/vendor/`.
 2. **One signature element** — something only this product has (a ledger's owed/owes line; a gym app's streak strip). Built from Basecoat parts plus `css/app.css`. Shows on the home screen, the empty state, and the install screen.
-3. **Voice** — words on buttons, empty screens, errors, the offline banner, and the Install button. Comes from the personality in `PRODUCT.md`. One action keeps one verb through the flow ("Save" → "Saved"). Errors say what happened and how to fix it.
+3. **Voice** — words on buttons, empty screens, errors, and the Install button. Add the offline banner only when the spec says Offline: on. Comes from the personality in `PRODUCT.md`. One action keeps one verb through the flow ("Save" → "Saved"). Errors say what happened and how to fix it.
 
 **Never rewrite Basecoat components or invent new ones.** A request that needs that is Later or Cut.
 
@@ -40,5 +40,5 @@ Basecoat gives every app the same solid SaaS base. Personality comes from **thre
 
 - Basecoat markup untouched; no new component framework.
 - Signature visible in at least 3 places.
-- The same verb through each flow; offline banner and Install button use the product voice.
+- The same verb through each flow. The Install button uses the product voice. The offline banner does too, only when Offline: on.
 - Contrast passes; the theme works offline (no CDN fonts).

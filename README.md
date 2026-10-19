@@ -1,9 +1,9 @@
 # PB Slim
 
-Agent skills that turn an AI coding agent into a product partner for **non-engineering PMs**. Describe an app idea in plain words. The agent ships a small **installable, offline-first web app** on [PocketBase](https://pocketbase.io), with no frontend framework or build step.
+Agent skills that turn an AI coding agent into a product partner for **non-engineering PMs**. Describe an app idea in plain words. The agent ships a small **installable web app** on [PocketBase](https://pocketbase.io), with no frontend framework or build step.
 
-- **Installable:** every app is a PWA with an "Install app" button on the site. No app stores.
-- **Offline first:** each feature is built in two phases. Phase 1 works fully offline and is tested. Phase 2 adds sync and live updates.
+- **Installable:** every app is a PWA with an "Install app" button on the site. No app stores. The installed app opens with no signal.
+- **Offline is a choice, off by default.** The spec says `Offline: off` or `Offline: on`. Off: screens talk to PocketBase. On: each feature is built in two phases (works offline, then syncs).
 - **Boring stack:** one PocketBase process, plain HTML/CSS/JS, [Basecoat UI](https://basecoatui.com) components, SQLite on disk.
 - **Personality per product:** Basecoat gives the solid SaaS base. Each product adds its own theme, one signature element, and voice.
 - **Spec before build:** the agent writes a living spec (v1 floor + later ceiling), reviews it in ship / cut / later, and builds only when asked.
@@ -15,9 +15,9 @@ The skills follow the open [Agent Skills](https://agentskills.io/specification) 
 | Skill | Job |
 |---|---|
 | `pb-slim` | Entry point: persona, how to talk to a PM, the fixed stack, which skill to use next |
-| `pb-spec` | Discovery, the living spec (two phases, look & feel), as-built PRD |
+| `pb-spec` | Discovery, the living spec (Offline line, look and feel), as-built PRD |
 | `pb-review` | Read-only review: ship / cut / later; UX audit |
-| `pb-build` | New app scaffold, phase 1 (offline) → test → phase 2 (sync + live), demo script |
+| `pb-build` | New app scaffold, then approved v1 (direct PocketBase calls, or two phases if Offline: on), demo script |
 | `pb-design` | Basecoat base + per-product theme, signature, voice |
 | `pb-deploy` | Putting the app online: one always-on server, files, backups, email, HTTPS; or a test link per pull request for throwaway data |
 

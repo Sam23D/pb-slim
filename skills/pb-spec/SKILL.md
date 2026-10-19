@@ -1,10 +1,10 @@
 ---
 name: pb-spec
-description: Write or update the living product spec for a PB Slim (PocketBase) app — discovery in at most three questions, v1 floor vs later ceiling, two phases per feature (offline first, then sync and live updates), look and feel, acceptance per phase. Also writes as-built PRDs from existing code. Use when a PM says "users should be able to…", "we need…", "write the spec", or "what does the app do today". Never builds.
+description: Write or update the living product spec for a PB Slim (PocketBase) app — discovery in at most three questions, v1 floor vs later ceiling, one Offline line (off unless they need no-signal edits), look and feel, one acceptance test. Also writes as-built PRDs from existing code. Use when a PM says "users should be able to…", "we need…", "write the spec", or "what does the app do today". Never builds.
 license: MIT
 metadata:
   author: sam23d
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Spec
@@ -19,7 +19,9 @@ Ask at most three questions. Fill the rest with defaults and state them.
 2. **Done when** — one sentence they could demo to a teammate.
 3. **Out of scope for v1** — if they do not know, propose cuts.
 
-Silent defaults: email + password, one user type, public page + signed-in installable app, files on the server disk, one region, last write wins on sync conflicts. Write them back: "I'm assuming X, Y, Z. Correct me in one line."
+Silent defaults: email + password, one user type, public page + signed-in installable app, files on the server disk, one region, **Offline: off**. Write them back: "I'm assuming X, Y, Z. Correct me in one line."
+
+Do not ask about offline unless they mention no-signal use. State it: "I'm assuming this needs a connection. Say if it must work with no signal."
 
 ## 2. One living file
 
@@ -27,7 +29,15 @@ Save to `specs/<slug>.md` in the project, or where the user keeps docs. Iterate 
 
 Write in **Simplified Technical English** (ASD-STE100 style): one short sentence, one instruction per line. Active voice, present tense. Simple words; the same thing said the same way every time. Max ~20 words a sentence. No noun stacks — use a short verb phrase. One meaning per word.
 
-## 3. Two phases for every feature (required)
+## 3. Offline is off unless the spec says on
+
+Write one line near the top of the PM half: **Offline: off** or **Offline: on**. Default is off.
+
+**Off (default).** Screens read and write PocketBase directly. One acceptance test: do the happy path, refresh, the change is still there. A screen that should update live gets one sentence ("this list updates by itself"). A write the server refuses: the user goes back to the old value and a short message says why. Typed text is never dropped. Do not add phase 1 / phase 2, an outbox, or a conflict rule.
+
+**On.** Add the two phases below. Build will load `pb-build/references/offline-first.md`. Do not add an outbox to an off project "just in case." Turning it on later is a client sync layer. PocketBase already has record ids and `updated`.
+
+When on:
 
 - **Phase 1 — Offline.** The feature works fully on the device with no network: read, create, edit, delete. Changes save on the device and wait in an outbox. The screen shows "Saved on this device" for unsynced changes. **Test:** the installed app in airplane mode (or browser offline mode) passes the happy path.
 - **Phase 2 — Online.** The outbox syncs to PocketBase when the connection returns. The spec names the **conflict rule** (default: last write wins per record — say who loses what). Screens that show shared data get live updates. **Test:** two devices; one goes offline, edits, comes back; both match. A change on device A appears on B without refresh.
@@ -39,14 +49,14 @@ Write in **Simplified Technical English** (ASD-STE100 style): one short sentence
 
 1. **Name + one-liner** — what this is.
 2. **v1 (floor)** — the smallest demo loop. Numbered clicks, starting from the Install button. Time-to-demo target (e.g. 10 minutes).
-3. **Phases** — what the user can do after phase 1 and after phase 2.
+3. **Offline** — off or on. If on, what the user can do with no signal, and what syncs after.
 4. **Look & feel** — 3 words, one thing it must not look like, one signature element only this product has (`pb-design`).
 5. **Later (ceiling)** — wanted, but must not block v1. Each item: why it can wait; what v1 must not paint into a corner.
 6. **Who** — roles (visitor, member, staff). What each may see and do, in verbs.
 7. **Happy path** — 5–12 user-visible steps.
 8. **Not now** — explicit cuts (payments, invites, store listings, …).
-9. **Risks in product language** — "if we turn the server off, live lists freeze"; "two people edit the same item offline: the last one to sync wins"; offline exceptions.
-10. **Acceptance** — per phase. A teammate with no repo can follow it and say pass/fail.
+9. **Risks in product language** — "if we turn the server off, you cannot save"; live lists freeze if the server sleeps. Add the offline conflict risk only when Offline: on.
+10. **Acceptance** — one test a teammate with no repo can follow and say pass/fail. Two phase tests only when Offline: on.
 11. **Open questions** — max 5, each with your recommended answer.
 
 ## 5. Build notes (short appendix, last)
@@ -54,19 +64,20 @@ Write in **Simplified Technical English** (ASD-STE100 style): one short sentence
 - Collections and fields for v1 only.
 - Who can read/write each collection, in role words, then the rule.
 - Screens and files to add.
-- Phase 1: IndexedDB stores, what the service worker caches (shell + `pb_public/vendor/`), outbox, manifest + Install button.
-- Phase 2: sync order, conflict rule, which screens get live updates.
+- Install: service worker caches the shell + `pb_public/vendor/`; manifest + Install button. The shell opens with no signal. That is not a data-offline test.
+- **Offline: off:** screens call PocketBase. No IndexedDB, no outbox. Live updates only on named screens.
+- **Offline: on:** IndexedDB stores, outbox, sync order, conflict rule, which screens get live updates.
 - Automations (email, webhook) only if v1 dies without them.
-- Photos: on disk vs bucket; backups separate; photos taken offline wait in the outbox.
-- Bite-sized tasks with file paths, grouped by phase.
+- Photos: on disk vs bucket; backups separate. Photos taken offline wait in the outbox only when Offline: on.
+- Bite-sized tasks with file paths. Group by phase only when Offline: on.
 
 **v1 quality bar:** if a section does not change what the user can *do* in the demo, it belongs in Later or Not now.
 
 ## 6. A new feature on a living spec
 
 - Add it as a new numbered section in the same file ("11. Feature: Teams"). Never a second spec.
-- The section holds: what it is, demo loop, rules, both phases, conflict rule, screens, acceptance per phase, later, not now.
-- Mark the section's state in its heading and in the file's status: SPEC → approved → phase 1 passed → phase 2 passed. Write "not checked yet" next to any acceptance step that has not run on the current release.
+- The section holds: what it is, demo loop, rules, the project's Offline line (do not invent a second one), screens, acceptance, later, not now. Add both phases and a conflict rule only when the project is Offline: on.
+- Mark the section's state in its heading and in the file's status: SPEC → approved → built. When Offline: on: SPEC → approved → phase 1 passed → phase 2 passed. Write "not checked yet" next to any acceptance step that has not run on the current release.
 - Record decisions with the default in **Decisions** (e.g. "4 per team; join goes to the smaller team").
 
 ## 7. After saving

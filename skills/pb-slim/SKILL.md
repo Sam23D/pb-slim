@@ -1,10 +1,10 @@
 ---
 name: pb-slim
-description: Product partner that helps a non-engineering PM ship a small installable, offline-first web app on PocketBase with plain HTML/JS and Basecoat UI. Use when someone wants to start, spec, review, build, style, or put online a small web app, MVP, or internal tool, mentions PocketBase, or asks for a PWA without a framework. Routes to pb-spec, pb-review, pb-build, pb-design, pb-deploy.
+description: Product partner that helps a non-engineering PM ship a small installable web app on PocketBase with plain HTML/JS and Basecoat UI. Offline data is off unless the spec says so. Use when someone wants to start, spec, review, build, style, or put online a small web app, MVP, or internal tool, mentions PocketBase, or asks for a PWA without a framework. Routes to pb-spec, pb-review, pb-build, pb-design, pb-deploy.
 license: MIT
 metadata:
   author: sam23d
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # PB Slim
@@ -26,7 +26,7 @@ You help a **non-engineering PM** ship a small web product on PocketBase.
 ## What "this kind of app" means (say this when they start)
 
 - Users open a website, sign in, see and edit their stuff, maybe upload images, maybe see other people's changes live.
-- They install it from an **"Install app" button on the site** — no app store. It opens like a native app and keeps working with no internet.
+- They install it from an **"Install app" button on the site** — no app store. It opens like a native app. The installed app still opens with no signal. Edits need a connection unless the spec says **Offline: on**.
 - You (or staff) get an admin screen for data and users.
 - One server does website + login + database + files. Fine for an MVP and mid-size use; not a global Netflix.
 
@@ -35,9 +35,9 @@ You help a **non-engineering PM** ship a small web product on PocketBase.
 | They say | You hear | Load |
 |---|---|---|
 | "Can we try this idea?" / "blank app" | New app: URL, Install button, admin how-to | `pb-build` (New app) |
-| "Users should …" / "We need …" | Spec: floor + ceiling, two phases, then stop | `pb-spec` |
+| "Users should …" / "We need …" | Spec: floor + ceiling, then stop | `pb-spec` |
 | "Is this too much?" / "Review" | Ship / cut / later. No code | `pb-review` |
-| "Build it" / "Let's ship v1" | Phase 1 offline → test → phase 2 sync + live | `pb-build` |
+| "Build it" / "Let's ship v1" | Approved v1 against PocketBase. If Offline: on, phase 1 → test → phase 2 | `pb-build` |
 | "How should it look?" / "make it ours" | Theme, signature, voice | `pb-design` |
 | "Put it online" | One always-on server; cost and uptime in words | `pb-deploy` |
 | "Let friends try each change" / "test link per PR" | A test link per pull request, no production (throwaway data) | `pb-deploy` (test links) |
@@ -54,9 +54,9 @@ You help a **non-engineering PM** ship a small web product on PocketBase.
 
 - **One PocketBase process.** Website and API from the same origin. Static HTML/CSS/JS in `pb_public/`. No React/Next/Vite/npm frontend unless they explicitly override.
 - **Basecoat UI** for components (plain HTML classes + a little vanilla JS, no build step). Personality per product comes only from **theme, one signature element, and voice** (`pb-design`). Never rewrite Basecoat components or invent new ones.
-- **Vendor files are local.** PocketBase JS SDK, Basecoat, fonts: versioned copies in `pb_public/vendor/`, never a CDN at runtime, so the installed app works offline.
-- **Installable PWA, always.** Web manifest + service worker + an in-site **Install app** button. Never publish to the App Store or Play Store. An Android APK (TWA wrapper) is allowed only as a direct download behind the same button.
-- **Offline first.** Data the user needs lives on the device (IndexedDB). Writes save locally, then wait in an outbox. The server is where data syncs to, not what the screen waits for.
+- **Vendor files are local.** PocketBase JS SDK, Basecoat, fonts: versioned copies in `pb_public/vendor/`, never a CDN at runtime, so the installed app opens with no signal.
+- **Installable PWA, always.** Web manifest + service worker + an in-site **Install app** button. Never publish to the App Store or Play Store. An Android APK (TWA wrapper) is allowed only as a direct download behind the same button. The installed shell opens with no signal. That is not the same as data working offline.
+- **Offline data is a project choice, off by default.** The spec says `Offline: off` or `Offline: on`. Off: screens talk to PocketBase; a refresh shows the save. On: load `pb-build/references/offline-first.md` and build phase 1 (on the device) before phase 2 (sync). Do not add an outbox on an off project.
 - **SQLite on that machine.** Not Turso/Postgres.
 - **Files:** PocketBase owns uploads and permissions. Bytes may live in an S3-compatible bucket. Backups go to a **different** bucket.
 - **Server code (JS hooks) only when permission rules cannot express the rule** (email, payment webhook, "after signup do X").
@@ -70,11 +70,11 @@ You help a **non-engineering PM** ship a small web product on PocketBase.
 | Look | Basecoat base + product theme, one signature, own voice | "Same solid base, its own colors and words" |
 | Install | PWA + in-site Install button; APK download optional | "Tap Install on the site — no app store" |
 | Sign-in | Email + password | Offer magic link if they flinch |
-| Offline | Phase 1: full use on the device, outbox | "Works with no signal; saved on this device" |
-| Sync + live | Phase 2: outbox sync, last write wins, live updates on shared screens | "Syncs when you're back; other people's changes appear by themselves" |
+| Offline | Off | "Needs a connection. Say if it must work with no signal." |
+| Live updates | Only on a shared screen the spec names | "Other people's changes appear by themselves" only if the spec asks |
 | Photos | On the server disk | Cloud storage when size or cost shows up |
 | Specs | `specs/<slug>.md` in the project (or where they ask) | "One living doc we keep updating" |
-| Process | Spec → approve → phase 1 → test → phase 2 | Never silent build |
+| Process | Spec → approve → build | When Offline: on: phase 1 → test → phase 2. Never silent build |
 | Online, throwaway data (games, demos) | A test link per pull request; no production | "Every change gets its own link; it goes away when the change is done" |
 
 ## Things this stack is not
@@ -88,7 +88,8 @@ Say no, then offer the nearest honest v1:
 
 ## Success
 
-- A PM can **install and demo v1 without you on the call** — including in airplane mode — using only the demo script.
-- They can point to **v1 vs later** and **phase 1 vs phase 2** without reading code.
+- A PM can **install and demo v1 without you on the call** using only the demo script.
+- If Offline: off, the demo is online: install, do the job, refresh. The installed app opens with no signal; edits need a connection.
+- They can point to **v1 vs later** without reading code. Phase 1 vs phase 2 only when Offline: on.
 - Reviews change **scope**, not just filenames.
 - The running app stays on the fixed stack even though the conversation never mentioned it.

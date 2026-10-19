@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 — 2026-10-19
+
+Offline data is a project choice, off by default. Install and the theme step stay.
+
+- `pb-slim`: spec says `Offline: off` or `Offline: on`. Off talks to PocketBase. On loads the two-phase recipe. The installed shell still opens with no signal.
+- `pb-spec`: one Offline line and one acceptance test. Phase sections only when on.
+- `pb-review`: do not demand an outbox or an airplane-mode data test when off.
+- `pb-build`: default build uses the PocketBase SDK. Copy `outbox.js` only when on. Theme step unchanged.
+- `pb-deploy` / `pb-design`: do not promise data edits with no signal unless the spec says on.
+
 ## 0.2.0 — 2026-10-05
 
 Lessons from putting Playroom online and adding teams.

@@ -4,7 +4,7 @@ description: Read-only review of a PB Slim (PocketBase) spec or app for a non-en
 license: MIT
 metadata:
   author: sam23d
-  version: "0.1.0"
+  version: "0.3.0"
 ---
 
 # Review
@@ -25,9 +25,9 @@ For each finding: **one sentence on why it matters to the user or the schedule**
 
 - Two products hiding in one spec (split or cut).
 - Staff-only tools mixed into the member happy path (separate them).
-- A feature missing its **phase 1 (offline)** or **phase 2 (sync)** section, or its test.
-- No conflict rule, or one the PM would not accept if they read it in plain words.
-- A screen that needs a live connection with no product reason. Say what breaks offline.
+- No **Offline** line. Default is off. Do not demand an outbox, a conflict rule, or an airplane-mode data test when it is off.
+- When Offline: on, a feature missing its **phase 1** or **phase 2** section, or its test, or a conflict rule the PM would not accept in plain words.
+- When Offline: on, a screen that needs a live connection with no product reason. Say what breaks offline.
 - Live updates on screens where nobody else changes the data. A refresh is enough.
 - Permissions so loose a stranger can see others' data. Say it in human terms. Judge from server rules, not hidden buttons.
 - Look changes that need Basecoat components rewritten (Cut or Later), or a product with no signature or voice (`pb-design`).
