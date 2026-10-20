@@ -1,4 +1,4 @@
-// sw.js — app shell cache. Data is NOT cached here; it lives in IndexedDB (outbox.js).
+// sw.js — app shell cache. Do not cache /api/ or /_/. Data comes from the server.
 // Bump VERSION on every release. List every vendor file in SHELL.
 // Also bump ?v=<release> on /css and /js links in the HTML (and here), or open tabs keep old code.
 const VERSION = 'app-v1';
@@ -9,14 +9,13 @@ const SHELL = [
   '/css/theme.css',
   '/css/app.css',
   '/js/app.js',
-  '/js/outbox.js',
   '/js/install.js',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   // '/vendor/basecoat-1.0.2/basecoat.cdn.min.css',
   // '/vendor/basecoat-1.0.2/basecoat.min.js',
-  // '/vendor/pocketbase-0.26.0/pocketbase.umd.js',
-  // '/vendor/tailwind-browser-4.x/tailwind.js',
+  // '/vendor/pocketbase-0.28.1/pocketbase.umd.js',
+  // '/vendor/tailwind-browser-4.3.3/tailwind.js',
 ];
 
 self.addEventListener('install', (event) => {

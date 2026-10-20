@@ -19,9 +19,9 @@ Ask at most three questions. Fill the rest with defaults and state them.
 2. **Done when** — one sentence they could demo to a teammate.
 3. **Out of scope for v1** — if they do not know, propose cuts.
 
-Silent defaults: email + password, one user type, public page + signed-in installable app, files on the server disk, one region, **Offline: off**. Write them back: "I'm assuming X, Y, Z. Correct me in one line."
+Silent defaults: email + password, one user type, public page + signed-in installable app, files on the server disk, one region, online. Write them back: "I'm assuming X, Y, Z. Correct me in one line."
 
-Do not ask about offline unless they mention no-signal use. State it: "I'm assuming this needs a connection. Say if it must work with no signal."
+Do not ask about offline. Do not add an Offline section unless they ask to work with no signal.
 
 ## 2. One living file
 
@@ -29,13 +29,11 @@ Save to `specs/<slug>.md` in the project, or where the user keeps docs. Iterate 
 
 Write in **Simplified Technical English** (ASD-STE100 style): one short sentence, one instruction per line. Active voice, present tense. Simple words; the same thing said the same way every time. Max ~20 words a sentence. No noun stacks — use a short verb phrase. One meaning per word.
 
-## 3. Offline is off unless the spec says on
+## 3. Online unless they ask
 
-Write one line near the top of the PM half: **Offline: off** or **Offline: on**. Default is off.
+Do not write an Offline section on a normal spec. Screens read and write PocketBase directly. One acceptance test: do the happy path, refresh, the change is still there. A screen that should update live gets one sentence ("this list updates by itself"). A write the server refuses: the user goes back to the old value and a short message says why. Typed text is never dropped.
 
-**Off (default).** Screens read and write PocketBase directly. One acceptance test: do the happy path, refresh, the change is still there. A screen that should update live gets one sentence ("this list updates by itself"). A write the server refuses: the user goes back to the old value and a short message says why. Typed text is never dropped. Do not add phase 1 / phase 2, an outbox, or a conflict rule.
-
-**On.** Add the two phases below. Build will load `pb-build/references/offline-first.md`. Do not add an outbox to an off project "just in case." Turning it on later is a client sync layer. PocketBase already has record ids and `updated`.
+**Only if they ask to work with no signal.** Add **Offline: on** and the two phases below. Build will load `pb-build/references/offline-first.md`. Do not add an outbox "just in case."
 
 When on:
 
@@ -49,15 +47,14 @@ When on:
 
 1. **Name + one-liner** — what this is.
 2. **v1 (floor)** — the smallest demo loop. Numbered clicks, starting from the Install button. Time-to-demo target (e.g. 10 minutes).
-3. **Offline** — off or on. If on, what the user can do with no signal, and what syncs after.
-4. **Look & feel** — 3 words, one thing it must not look like, one signature element only this product has (`pb-design`).
-5. **Later (ceiling)** — wanted, but must not block v1. Each item: why it can wait; what v1 must not paint into a corner.
-6. **Who** — roles (visitor, member, staff). What each may see and do, in verbs.
-7. **Happy path** — 5–12 user-visible steps.
-8. **Not now** — explicit cuts (payments, invites, store listings, …).
-9. **Risks in product language** — "if we turn the server off, you cannot save"; live lists freeze if the server sleeps. Add the offline conflict risk only when Offline: on.
-10. **Acceptance** — one test a teammate with no repo can follow and say pass/fail. Two phase tests only when Offline: on.
-11. **Open questions** — max 5, each with your recommended answer.
+3. **Look & feel** — 3 words, one thing it must not look like, one signature element only this product has (`pb-design`).
+4. **Later (ceiling)** — wanted, but must not block v1. Each item: why it can wait; what v1 must not paint into a corner.
+5. **Who** — roles (visitor, member, staff). What each may see and do, in verbs.
+6. **Happy path** — 5–12 user-visible steps.
+7. **Not now** — explicit cuts (payments, invites, store listings, …).
+8. **Risks in product language** — "if we turn the server off, you cannot save"; live lists freeze if the server sleeps. Add the offline conflict risk only when they asked for offline.
+9. **Acceptance** — one test a teammate with no repo can follow and say pass/fail. Two phase tests only when they asked for offline.
+10. **Open questions** — max 5, each with your recommended answer.
 
 ## 5. Build notes (short appendix, last)
 

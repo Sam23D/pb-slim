@@ -2,8 +2,6 @@
 
 <One line: what this is and who it is for.>
 
-**Offline:** off.
-
 ## v1 (floor)
 
 Time to demo: <10> minutes.

@@ -2,7 +2,7 @@
 
 Install and the service-worker shell are every app. Phase 1 and Phase 2 below apply only when the spec says **Offline: on**. Do not add IndexedDB or an outbox to an off project.
 
-Starter files in `assets/`: `manifest.webmanifest`, `sw.js`, `install.js`, `outbox.js`, `index.html`.
+Starter files in `assets/`: `manifest.webmanifest`, `sw.js`, `install.js`, `index.html` are the online app. Copy `outbox.js` only when they ask for offline.
 
 ## Install button (always)
 

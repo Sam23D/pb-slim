@@ -1,6 +1,6 @@
 # Basecoat on no-build PocketBase apps
 
-Basecoat = shadcn-style components as plain CSS classes plus small vanilla JS. No npm app, no bundler. Facts from the 1.0.2 package source; check the version you vendor.
+Basecoat = shadcn-style components as plain CSS classes plus small vanilla JS. No npm app, no bundler. Pins checked against npm `latest`: Basecoat **1.0.2**, Tailwind browser build **4.3.3**, PocketBase JS SDK **0.28.1**. Copy from the tarball. Do not scrape a CDN. If `latest` has moved, use the newer version and say so.
 
 ## Get and pin the files
 
