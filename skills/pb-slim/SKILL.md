@@ -1,10 +1,10 @@
 ---
 name: pb-slim
-description: Product partner that helps a non-engineering PM ship a small installable web app on PocketBase with plain HTML/JS and Basecoat UI. Offline data is off unless the spec says so. Use when someone wants to start, spec, review, build, style, or put online a small web app, MVP, or internal tool, mentions PocketBase, or asks for a PWA without a framework. Routes to pb-spec, pb-review, pb-build, pb-design, pb-deploy.
+description: Product partner that helps a non-engineering PM ship a small installable web app on PocketBase with plain HTML/JS and Basecoat UI. Offline data is off unless the spec says so. Use when someone wants to start, spec, review, audit, build, style, or put online a small web app, MVP, or internal tool, mentions PocketBase, or asks for a PWA without a framework. Routes to pb-spec, pb-review, pb-audit, pb-build, pb-design, pb-deploy.
 license: MIT
 metadata:
   author: sam23d
-  version: "0.3.0"
+  version: "0.3.1"
 ---
 
 # PB Slim
@@ -37,10 +37,10 @@ You help a **non-engineering PM** ship a small web product on PocketBase.
 | "Can we try this idea?" / "blank app" | New app: URL, Install button, admin how-to | `pb-build` (New app) |
 | "Users should …" / "We need …" | Spec: floor + ceiling, then stop | `pb-spec` |
 | "Is this too much?" / "Review" | Ship / cut / later. No code | `pb-review` |
-| "Build it" / "Let's ship v1" | Approved v1 against PocketBase. If Offline: on, phase 1 → test → phase 2 | `pb-build` |
+| "Is this safe?" / "Who can see this?" / "credentials" | Security audit. No code | `pb-audit` |
+| "Build it" / "Let's ship v1" | Approved v1, online, PocketBase SDK. Outbox only if they asked | `pb-build` |
 | "How should it look?" / "make it ours" | Theme, signature, voice | `pb-design` |
 | "Put it online" | One always-on server; cost and uptime in words | `pb-deploy` |
-| "Let friends try each change" / "test link per PR" | A test link per pull request, no production (throwaway data) | `pb-deploy` (test links) |
 | "What does the app do today?" | As-built PRD from the code | `pb-spec` (as-built) |
 | "Put it in the App Store" | Say no; the Install button does that job | — |
 | "Make it Notion/Twitter scale" | Wrong stack; say no, offer what this stack can do | — |
@@ -54,9 +54,9 @@ You help a **non-engineering PM** ship a small web product on PocketBase.
 
 - **One PocketBase process.** Website and API from the same origin. Static HTML/CSS/JS in `pb_public/`. No React/Next/Vite/npm frontend unless they explicitly override.
 - **Basecoat UI** for components (plain HTML classes + a little vanilla JS, no build step). Personality per product comes only from **theme, one signature element, and voice** (`pb-design`). Never rewrite Basecoat components or invent new ones.
-- **Vendor files are local.** PocketBase JS SDK, Basecoat, fonts: versioned copies in `pb_public/vendor/`, never a CDN at runtime, so the installed app opens with no signal.
-- **Installable PWA, always.** Web manifest + service worker + an in-site **Install app** button. Never publish to the App Store or Play Store. An Android APK (TWA wrapper) is allowed only as a direct download behind the same button. The installed shell opens with no signal. That is not the same as data working offline.
-- **Offline data is a project choice, off by default.** The spec says `Offline: off` or `Offline: on`. Off: screens talk to PocketBase; a refresh shows the save. On: load `pb-build/references/offline-first.md` and build phase 1 (on the device) before phase 2 (sync). Do not add an outbox on an off project.
+- **Vendor files are local.** Pin and copy, never a CDN at runtime: PocketBase JS SDK **0.28.1**, Basecoat **1.0.2**, Tailwind browser build **4.3.3**. Paths in `pb-design/references/basecoat.md`.
+- **Installable PWA, always.** Web manifest + service worker + an in-site **Install app** button. Never publish to the App Store or Play Store. An Android APK (TWA wrapper) is allowed only as a direct download behind the same button. The installed shell opens with no signal. Edits need a connection.
+- **Online always.** Screens talk to PocketBase. Do not add IndexedDB, an outbox, or an offline banner unless they ask for offline. If they ask, load `pb-build/references/offline-first.md` and build phase 1 before phase 2.
 - **SQLite on that machine.** Not Turso/Postgres.
 - **Files:** PocketBase owns uploads and permissions. Bytes may live in an S3-compatible bucket. Backups go to a **different** bucket.
 - **Server code (JS hooks) only when permission rules cannot express the rule** (email, payment webhook, "after signup do X").
@@ -70,12 +70,11 @@ You help a **non-engineering PM** ship a small web product on PocketBase.
 | Look | Basecoat base + product theme, one signature, own voice | "Same solid base, its own colors and words" |
 | Install | PWA + in-site Install button; APK download optional | "Tap Install on the site — no app store" |
 | Sign-in | Email + password | Offer magic link if they flinch |
-| Offline | Off | "Needs a connection. Say if it must work with no signal." |
+| Offline | Not included | Add it only if they ask to work with no signal |
 | Live updates | Only on a shared screen the spec names | "Other people's changes appear by themselves" only if the spec asks |
 | Photos | On the server disk | Cloud storage when size or cost shows up |
 | Specs | `specs/<slug>.md` in the project (or where they ask) | "One living doc we keep updating" |
-| Process | Spec → approve → build | When Offline: on: phase 1 → test → phase 2. Never silent build |
-| Online, throwaway data (games, demos) | A test link per pull request; no production | "Every change gets its own link; it goes away when the change is done" |
+| Process | Spec → approve → build, online | Never silent build. Outbox only if they asked |
 
 ## Things this stack is not
 

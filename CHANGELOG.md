@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.2 — 2026-10-19
+
+- Online is the only default. The starter HTML and service worker do not load `outbox.js`. Add the outbox only when they ask for offline.
+- Vendor pins: PocketBase JS SDK 0.28.1, Basecoat 1.0.2, Tailwind browser build 4.3.3.
+- `pb-deploy`: one always-on server only. Per-PR test links, sprites, and CI are removed until a later version of this skill.
+
+## 0.3.1 — 2026-10-19
+
+- `pb-audit`: read-only security audit. Rules, protected files, hooks that skip rules, secrets in the browser. "Is this safe?" loads it, not `pb-review`.
+
 ## 0.3.0 — 2026-10-19
 
 Offline data is a project choice, off by default. Install and the theme step stay.

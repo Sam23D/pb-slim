@@ -1,10 +1,10 @@
 ---
 name: pb-review
-description: Read-only review of a PB Slim (PocketBase) spec or app for a non-engineering PM, sorted into ship in v1, cut, or later, with one sentence of user or schedule impact each. Also runs product-side UX audits. Use when a PM asks "does this make sense", "is this too big", "what's missing", "review", or "audit". Never edits the spec or code unless asked.
+description: Read-only review of a PB Slim (PocketBase) spec or app for a non-engineering PM, sorted into ship in v1, cut, or later, with one sentence of user or schedule impact each. Also runs product-side UX audits. Use when a PM asks "does this make sense", "is this too big", "what's missing", or "review". For who-can-see-this or credential leaks, use pb-audit. Never edits the spec or code unless asked.
 license: MIT
 metadata:
   author: sam23d
-  version: "0.3.0"
+  version: "0.3.1"
 ---
 
 # Review
@@ -25,11 +25,11 @@ For each finding: **one sentence on why it matters to the user or the schedule**
 
 - Two products hiding in one spec (split or cut).
 - Staff-only tools mixed into the member happy path (separate them).
-- No **Offline** line. Default is off. Do not demand an outbox, a conflict rule, or an airplane-mode data test when it is off.
-- When Offline: on, a feature missing its **phase 1** or **phase 2** section, or its test, or a conflict rule the PM would not accept in plain words.
-- When Offline: on, a screen that needs a live connection with no product reason. Say what breaks offline.
+- No outbox, no offline banner, and no phase 1 / phase 2 section unless they asked to work with no signal.
+- When they asked for offline, a feature missing its **phase 1** or **phase 2** section, or its test, or a conflict rule the PM would not accept in plain words.
+- When they asked for offline, a screen that needs a live connection with no product reason. Say what breaks offline.
 - Live updates on screens where nobody else changes the data. A refresh is enough.
-- Permissions so loose a stranger can see others' data. Say it in human terms. Judge from server rules, not hidden buttons.
+- Permissions so loose a stranger can see others' data. Point them at `pb-audit` for the full check. Judge from server rules, not hidden buttons.
 - Look changes that need Basecoat components rewritten (Cut or Later), or a product with no signature or voice (`pb-design`).
 - No Install button, or an app store listing in scope.
 
