@@ -4,7 +4,7 @@ description: "Put a PB Slim app on one always-on server, in product terms."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # Online

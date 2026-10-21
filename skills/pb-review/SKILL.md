@@ -4,7 +4,7 @@ description: "Product review of a PB Slim spec or app: ship, cut, later."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # Review

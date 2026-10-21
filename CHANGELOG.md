@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.0 — 2026-10-20
+
+Multi-page by default. Public pages are files, never rendered per request.
+
+- `pb-build`: new `references/pages.md`. One HTML file per screen, plain links, no client router. Public pages are static HTML, or a file a hook writes under `pb_public/p/` when a public record changes (escaped, public fields only). The service worker lists every page.
+- `pb-spec`: the Screens table gains **Public or signed-in**. A Public page lists its public fields. Build notes name the hook and fields.
+- `pb-audit`: flags a page-writing hook that emits a non-public field or does not escape.
+- `pb-slim/references/stack.md`: "Multi-page" line; PocketPages/EJS named under "not this stack", with the one case (a signed-in page that must be indexed).
+
 ## 0.5.0 — 2026-10-20
 
 Live screens are a first-class, per-screen decision. Static stays the default.

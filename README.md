@@ -61,7 +61,7 @@ skills/
   pb-spec/     SKILL.md, references/{as-built-prd,restyle}.md, assets/spec-template.md
   pb-review/   SKILL.md, references/ux-audit.md
   pb-audit/    SKILL.md, references/checks.md
-  pb-build/    SKILL.md, references/{data,migrations,realtime,offline-first,pocketbase-jsvm,local-dev}.md,
+  pb-build/    SKILL.md, references/{pages,data,migrations,realtime,offline-first,pocketbase-jsvm,local-dev}.md,
                assets/{index.html,manifest.webmanifest,sw.js}, assets/js/{install,outbox}.js,
                assets/vendor/VERSIONS.json, assets/icons/
   pb-design/   SKILL.md, references/basecoat.md, assets/{theme.css,PRODUCT.md,DESIGN.md}
