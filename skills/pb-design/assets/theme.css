@@ -1,12 +1,15 @@
-/* theme.css — per-product personality on top of Basecoat.
+/* theme.css — full token list on top of Basecoat. The blank app ships a shorter
+   version at pb-build/assets/css/theme.css; this is the same file with every token.
    Load after vendor/basecoat-<v>/basecoat.cdn.min.css. Values come from DESIGN.md.
    Change values only; never restyle Basecoat components here. */
 
+/* Self-hosted font. Delete this block to stay on system-ui.
 @font-face {
-  font-family: "Product Sans";            /* self-hosted: pb_public/vendor/fonts/ */
+  font-family: "Product Sans";
   src: url("../vendor/fonts/product-sans.woff2") format("woff2");
   font-display: swap;
 }
+*/
 
 :root {
   /* Surfaces */
@@ -35,7 +38,7 @@
 
   /* Shape and type */
   --radius: 0.5rem;
-  --font-sans: "Product Sans", system-ui, sans-serif;
+  --font-sans: system-ui, sans-serif;     /* or "Product Sans", system-ui, sans-serif */
   --font-heading: var(--font-sans);
 
   /* Charts */

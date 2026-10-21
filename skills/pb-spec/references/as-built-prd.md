@@ -20,4 +20,4 @@ Derive permission findings from the **server rules**, not the screens. A hidden 
 
 ## After the user answers
 
-Add each yes as a "Next floor — <rule>" section in the living spec (demo clicks, defaults, acceptance, not-in-this-floor, build notes). Add phases only if that app is Offline: on. Mark the question decided in the PRD. Ask before building.
+Add each yes as a "Next floor — <rule>" section in the living spec (demo clicks, defaults, acceptance, not-in-this-floor, build notes). Mark the question decided in the PRD. Ask before building.

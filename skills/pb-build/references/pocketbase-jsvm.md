@@ -37,10 +37,13 @@ app.save(items)
 - Author-only rows: create `@request.body.owner = @request.auth.id`; update `owner = @request.auth.id && (@request.body.owner:isset = false || @request.body.owner = @request.auth.id)`.
 - If an `onBootstrap` hook re-applies rules on every start, a rule change needs **both** that hook and a migration, or the hook silently reverts it. Grep `pb_hooks` before changing rules.
 
-## Offline-first fields
+## Offline fields (only when they asked for offline)
 
 - Client-made ids: PocketBase accepts an `id` on create (15 chars, `[a-z0-9]`). The outbox uses this so the same id works on the device and the server.
-- Add `created` / `updated` **autodate** fields to every collection you create with a custom field list. Without them, `sort=-created` returns 400 and pages hang on "Loading…".
+
+## Every collection
+
+- Add `created` / `updated` **autodate** fields to every collection you create with a custom field list. Without them, `sort=-created` returns 400 and pages hang on "Loading…". Full migration shape: `migrations.md`.
 
 ## Gotchas
 

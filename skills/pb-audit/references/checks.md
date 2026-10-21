@@ -27,6 +27,37 @@ Share-by-code: `code = @request.query.code` on view, and nothing else. A rule th
 
 Auth `manageRule`: leave `null` unless a named staff role must change another user's email or password.
 
+## Two-client proof (run with `terminal`)
+
+Needs a running server and two throwaway members, `ZZ Test A` (owns a row) and `ZZ Test B`. Ask before creating them on live data. Replace `items`, `owner`, the ids, and the password.
+
+```sh
+PB=http://127.0.0.1:8090
+# 1. Guest list: expect 200 and "totalItems":0. Anything else is a leak.
+curl -s "$PB/api/collections/items/records"
+# 2. Member B token.
+TOKEN_B=$(curl -s -X POST "$PB/api/collections/users/auth-with-password" \
+  -H 'content-type: application/json' \
+  -d '{"identity":"zz-test-b@example.com","password":"<B password>"}' | python3 -c 'import json,sys; print(json.load(sys.stdin)["token"])')
+# 3. B lists: expect only B's rows (none if B has no rows).
+curl -s "$PB/api/collections/items/records" -H "Authorization: $TOKEN_B"
+# 4. B views A's row: expect 404.
+curl -s -o /dev/null -w '%{http_code}\n' "$PB/api/collections/items/records/<A row id>" -H "Authorization: $TOKEN_B"
+# 5. B creates a row as A: expect 400.
+curl -s -o /dev/null -w '%{http_code}\n' -X POST "$PB/api/collections/items/records" \
+  -H "Authorization: $TOKEN_B" -H 'content-type: application/json' \
+  -d '{"title":"x","owner":"<A user id>"}'
+# 6. B updates A's row: expect 404.
+curl -s -o /dev/null -w '%{http_code}\n' -X PATCH "$PB/api/collections/items/records/<A row id>" \
+  -H "Authorization: $TOKEN_B" -H 'content-type: application/json' -d '{"title":"y"}'
+# 7. Guest file URL on a private field: expect 404 if Protected. 200 means anyone with the URL can read it.
+curl -s -o /dev/null -w '%{http_code}\n' "$PB/api/files/items/<A row id>/<filename>"
+# 8. B expands the roster: expect no email field in the output.
+curl -s "$PB/api/collections/users/records?fields=id,name,email" -H "Authorization: $TOKEN_B"
+```
+
+Record each number next to the expected one. A match is a pass. Anything else is a finding. Remove the test members afterwards.
+
 ## What to search in files the browser loads
 
 Search `pb_public/` and any release script that copies files into it. Flag a hit. Do not print the value.

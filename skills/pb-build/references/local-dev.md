@@ -27,7 +27,3 @@ Never write to the live `pb_data`. Report to the PM as "one app, X, with these t
 ## Testing on live data
 
 Ask first. Use throwaway members named `ZZ Test …` and remove what they created afterwards.
-
-## A second server for CI rehearsal
-
-Rehearse a CI test job with the pinned binary, the project's folders, a fresh `--dir` in a temp folder, and a spare port (not the app's port). Start it as a background process, run the check scripts against it, then stop it. Never point checks at another app's server.
