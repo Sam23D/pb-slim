@@ -4,7 +4,7 @@ description: "Security audit of a PB Slim app: rules, files, hooks, leaks."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # Security audit
@@ -43,6 +43,7 @@ If you cannot run the two clients, say "not checked yet". Do not call the rules 
 - A secret in a file the browser loads: superuser or admin password, SMTP or S3 or host token, OAuth client secret, Turnstile **secret**, `_superusers` sign-in, a literal `authWithPassword("…", "…")`. A Turnstile **site** key is public. The signed-in user's own SDK token in localStorage is normal. Do not flag those two.
 - The service worker caching `/api/` or `/_/`, including `/api/files/`.
 - A hook or custom route that loads records with the app (superuser) and returns them to the client without checking that caller's rule.
+- A hook that writes a public page file (`pb_public/p/`) with a field the spec did not mark public, or without escaping values. Open the written file as a guest and read it; the file is the proof.
 - Expand or a roster call that returns another member's email, phone, or secret field. Prove it with member B's token. Do not assume a field is hidden.
 - When they asked for offline: a pull or outbox that keeps other people's private rows on the device, or that keeps them after sign-out on a shared phone.
 

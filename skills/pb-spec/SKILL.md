@@ -4,7 +4,7 @@ description: "Living product spec for a PB Slim app. Writes, never builds."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # Spec
@@ -51,6 +51,8 @@ Presence ("who is online"), typing, and cursors are not rows. They are a **live 
 
 Say the product cost once in Risks: a Live screen needs the server awake, so it will not sleep to save money.
 
+**Public pages.** A screen is Public only when the spec says anyone may open it without signing in and search engines may index it: landing, pricing, a shareable record page. A Public page shows only the fields the spec lists as public. Everything else needs sign-in. A signed-in page cannot be indexed; if they need that, say so and stop.
+
 ## 5. PM half (first in the file)
 
 1. **Name + one-liner** — what this is.
@@ -58,7 +60,7 @@ Say the product cost once in Risks: a Live screen needs the server awake, so it 
 3. **Look & feel** — 3 words, one thing it must not look like, one signature element only this product has (`pb-design`).
 4. **Later (ceiling)** — wanted, but must not block v1. Each item: why it can wait; what v1 must not paint into a corner.
 5. **Who** — roles (visitor, member, staff). What each may see and do, in verbs.
-6. **Screens** — one line each: name, who looks at it, **static** or **Live** (with watches / who else writes it).
+6. **Screens** — one line each: name, who looks at it, **Public** (no sign-in, search engines may index it) or signed-in, **static** or **Live** (with watches / who else writes it).
 7. **Happy path** — 5–12 user-visible steps.
 8. **Not now** — explicit cuts (payments, invites, store listings, …).
 9. **Risks in product language** — "if we turn the server off, you cannot save"; Live screens freeze if the server sleeps.
@@ -72,6 +74,7 @@ Say the product cost once in Risks: a Live screen needs the server awake, so it 
 - Screens and files to add.
 - Install: the starter's service worker caches the shell + `vendor/`; manifest + Install button. The shell opens with no signal. That is not a data test.
 - Live: for each Live screen, the subscription (collection or record, filter) and the rule that gates it. Live signals (presence, typing): the topic name, who may hear it. Nothing else subscribes.
+- Public pages: static file, or written by a hook from which collection, and the list of public fields.
 - Automations (email, webhook) only if v1 dies without them.
 - Photos: on disk vs bucket; backups separate.
 - Bite-sized tasks with file paths.

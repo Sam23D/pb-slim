@@ -33,10 +33,12 @@ Time to demo: <10> minutes.
 
 ## Screens
 
-| Screen | Who looks at it | Static or Live | Live: watches / who else writes it |
-|---|---|---|---|
-| <Home> | Member | Static | |
-| <Shared list> | Member | Live | `items` where `list = this list` / other members of the list |
+| Screen | Who looks at it | Public or signed-in | Static or Live | Live: watches / who else writes it |
+|---|---|---|---|---|
+| <Landing> | Visitor | Public | Static | |
+| <Home> | Member | Signed-in | Static | |
+| <Shared list> | Member | Signed-in | Live | `items` where `list = this list` / other members of the list |
+| <Share page `/p/<id>`> | Visitor | Public (fields: title, summary) | Static | |
 
 ## Happy path
 
@@ -75,5 +77,6 @@ Time to demo: <10> minutes.
 - **Data:** PocketBase directly. No outbox.
 - **Live:** <screen>: subscribe `items` filter `list = {:id}`, gated by the `items` list rule. <Or: none.>
 - **Live signals:** <presence topic `presence/<room>`, members only. Or: none.>
+- **Public pages:** <`index.html` static. `/p/<id>.html` written by a hook from `items` where `public = true`; fields: title, summary. Or: none.>
 - **Tasks:**
   - …
