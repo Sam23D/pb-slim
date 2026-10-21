@@ -4,7 +4,7 @@ description: "Theme, one signature element, and voice on Basecoat."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # Design: Basecoat base, product personality

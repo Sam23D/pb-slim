@@ -4,7 +4,7 @@ description: "Security audit of a PB Slim app: rules, files, hooks, leaks."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # Security audit

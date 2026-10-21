@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0 — 2026-10-20
+
+Live screens are a first-class, per-screen decision. Static stays the default.
+
+- `pb-spec`: a **Screens** table with static or Live per screen. Live needs a watched collection, who else writes it, and a two-session test. Presence and typing are "live signals", not rows. The template has the table and the test.
+- `pb-build`: one `render()` over a `Map` keyed by id for every screen (`data.md`). A Live screen adds one filtered subscription into that map: subscribe before load, unsubscribe on leave, reload on `PB_CONNECT`, no toast for others' changes (`realtime.md`). A static screen gets no subscription even if it would be easy.
+- `pb-review`: flags a Live screen nobody else writes, a Live screen without its test, and a shared screen left static with no reason.
+- `pb-slim/references/stack.md`: the Live default reads "static unless the spec marks it".
+
 ## 0.4.0 — 2026-10-20
 
 One release number for the whole pack from here on.

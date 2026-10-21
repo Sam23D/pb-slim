@@ -4,7 +4,7 @@ description: "PocketBase product partner for PMs. Routes to pb-* skills."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # PB Slim
