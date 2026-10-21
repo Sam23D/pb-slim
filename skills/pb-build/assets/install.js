@@ -12,7 +12,7 @@
         setInterval(function () { reg.update(); }, 30 * 60 * 1000);
       });
     });
-    // A new release took over: reload once so this tab runs the new code (data is in IndexedDB).
+    // A new release took over: reload once so this tab runs the new shell.
     var reloading = false;
     navigator.serviceWorker.addEventListener('controllerchange', function () {
       if (!hadController) { hadController = true; return; }

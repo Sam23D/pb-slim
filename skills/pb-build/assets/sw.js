@@ -12,10 +12,12 @@ const SHELL = [
   '/js/install.js',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
-  // '/vendor/basecoat-1.0.2/basecoat.cdn.min.css',
-  // '/vendor/basecoat-1.0.2/basecoat.min.js',
-  // '/vendor/pocketbase-0.28.1/pocketbase.umd.js',
-  // '/vendor/tailwind-browser-4.3.3/tailwind.js',
+  '/icons/icon-maskable-512.png',
+  '/vendor/basecoat-1.0.2/basecoat.cdn.min.css',
+  '/vendor/basecoat-1.0.2/basecoat.min.js',
+  '/vendor/basecoat-1.0.2/toast.min.js',
+  '/vendor/pocketbase-0.28.1/pocketbase.umd.js',
+  '/vendor/tailwind-browser-4.3.3/tailwind.js',
 ];
 
 self.addEventListener('install', (event) => {

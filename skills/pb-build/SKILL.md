@@ -16,7 +16,7 @@ Read the request before writing data code. Online is the default. Do not add Ind
 ## New app — done when a PM can click
 
 1. Start one PocketBase process with `pb_public/`, `pb_hooks/`, `pb_migrations/` from the project (`references/local-dev.md`). Never start a second process for another app.
-2. Copy the starter files from `assets/` into `pb_public/`: `index.html`, `manifest.webmanifest`, `sw.js`, `js/install.js`. Those files are online-only. Do **not** copy `js/outbox.js`, and do not add a script tag for it, until they ask for offline. Vendor into `pb_public/vendor/` from the npm tarball, never a CDN: PocketBase JS SDK **0.28.1** (`dist/pocketbase.umd.js`), Basecoat **1.0.2**, Tailwind browser build **4.3.3**. Uncomment the matching lines in `index.html` and `sw.js` after the copy. Recipe: `pb-design/references/basecoat.md`.
+2. Copy the starter into `pb_public/`: `index.html`, `manifest.webmanifest`, `sw.js`, `css/`, `js/install.js`, `js/app.js`, `icons/`, and `vendor/`. Those files are online-only and already include the pinned libraries. Do **not** copy `js/outbox.js`, and do not add a script tag for it, until they ask for offline. Do not re-download the libraries. Pins and checksums: `assets/vendor/VERSIONS.json`.
 3. Prove it: the page loads, the **Install app** button works, the installed app opens in airplane mode (the shell; there is no product data yet).
 4. Reply in everyday words: the URL, how to install, how to create the first admin (`/_/`), and "Tell me the first user and the first job, and I'll write the v1 spec."
 

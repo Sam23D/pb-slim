@@ -4,14 +4,14 @@ Basecoat = shadcn-style components as plain CSS classes plus small vanilla JS. N
 
 ## Get and pin the files
 
-1. Download the npm tarball and inspect it. Do not scrape the CDN.
-   `curl -sSfL -o bc.tgz https://registry.npmjs.org/basecoat-css/-/basecoat-css-<v>.tgz && tar xzf bc.tgz`
-   Latest version: `https://registry.npmjs.org/basecoat-css/latest`.
-2. Copy into `pb_public/vendor/basecoat-<v>/`:
-   - `dist/basecoat.cdn.min.css` (standalone bundle)
-   - `dist/js/basecoat.min.js` plus only the component scripts you use (`dropdown-menu`, `tabs`, `toast`, …)
-   - `LICENSE.md`
-3. Keep the version in the path so it cannot drift. Vendor the Tailwind browser build and the PocketBase SDK the same way. Add every vendor file to the service worker's cache list.
+A new app copies `pb-build/assets/vendor/` as-is. Do not re-download.
+
+To bump a library later:
+
+1. Read `pb-build/assets/vendor/VERSIONS.json`.
+2. Download that npm tarball and replace only its versioned folder. Keep the license file.
+3. Change the version in `VERSIONS.json`, `index.html`, and `sw.js` together. The folder name is the version.
+4. If `latest` has moved, use the newer version and say so. Do not scrape a CDN.
 
 ## Page `<head>` order
 

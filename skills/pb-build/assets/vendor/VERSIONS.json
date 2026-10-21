@@ -1,0 +1,54 @@
+{
+  "note": "Pins for the blank-app starter. To bump one library: download that tarball, replace its folder, then change the version here and the matching path in index.html and sw.js. Do not scrape a CDN.",
+  "libs": [
+    {
+      "name": "PocketBase JS SDK",
+      "npm": "pocketbase",
+      "version": "0.28.1",
+      "tarball": "https://registry.npmjs.org/pocketbase/-/pocketbase-0.28.1.tgz",
+      "files": [
+        {
+          "from": "dist/pocketbase.umd.js",
+          "to": "vendor/pocketbase-0.28.1/pocketbase.umd.js",
+          "sha256": "08bb483d6d83a3b95491aa3700ac59370a960cc864ac19784acfafa68ad0b233"
+        }
+      ]
+    },
+    {
+      "name": "Basecoat",
+      "npm": "basecoat-css",
+      "version": "1.0.2",
+      "tarball": "https://registry.npmjs.org/basecoat-css/-/basecoat-css-1.0.2.tgz",
+      "files": [
+        {
+          "from": "dist/basecoat.cdn.min.css",
+          "to": "vendor/basecoat-1.0.2/basecoat.cdn.min.css",
+          "sha256": "8123677adb9bba43be3298e1543bcc5fc763e8cda3d32dc74c806046a3537ca0"
+        },
+        {
+          "from": "dist/js/basecoat.min.js",
+          "to": "vendor/basecoat-1.0.2/basecoat.min.js",
+          "sha256": "93fa012baa09fa49a06d411da3ced2176a121e45ae977955ecf82c5bd3eb6a50"
+        },
+        {
+          "from": "dist/js/toast.min.js",
+          "to": "vendor/basecoat-1.0.2/toast.min.js",
+          "sha256": "312f84e65cab7989ef418c4ccc729364d29f2394e1abb2fc1a483816ed8fb0a8"
+        }
+      ]
+    },
+    {
+      "name": "Tailwind browser build",
+      "npm": "@tailwindcss/browser",
+      "version": "4.3.3",
+      "tarball": "https://registry.npmjs.org/@tailwindcss/browser/-/browser-4.3.3.tgz",
+      "files": [
+        {
+          "from": "dist/index.global.js",
+          "to": "vendor/tailwind-browser-4.3.3/tailwind.js",
+          "sha256": "a60c785630a06196808cbe79e6f7bdb4abcc8f4421a47b56f29338fc84805e3b"
+        }
+      ]
+    }
+  ]
+}

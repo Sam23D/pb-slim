@@ -54,7 +54,7 @@ You help a **non-engineering PM** ship a small web product on PocketBase.
 
 - **One PocketBase process.** Website and API from the same origin. Static HTML/CSS/JS in `pb_public/`. No React/Next/Vite/npm frontend unless they explicitly override.
 - **Basecoat UI** for components (plain HTML classes + a little vanilla JS, no build step). Personality per product comes only from **theme, one signature element, and voice** (`pb-design`). Never rewrite Basecoat components or invent new ones.
-- **Vendor files are local.** Pin and copy, never a CDN at runtime: PocketBase JS SDK **0.28.1**, Basecoat **1.0.2**, Tailwind browser build **4.3.3**. Paths in `pb-design/references/basecoat.md`.
+- **Vendor files are local.** The blank-app starter already contains them. Pins: PocketBase JS SDK **0.28.1**, Basecoat **1.0.2**, Tailwind browser build **4.3.3**. Record: `pb-build/assets/vendor/VERSIONS.json`. Never a CDN at runtime.
 - **Installable PWA, always.** Web manifest + service worker + an in-site **Install app** button. Never publish to the App Store or Play Store. An Android APK (TWA wrapper) is allowed only as a direct download behind the same button. The installed shell opens with no signal. Edits need a connection.
 - **Online always.** Screens talk to PocketBase. Do not add IndexedDB, an outbox, or an offline banner unless they ask for offline. If they ask, load `pb-build/references/offline-first.md` and build phase 1 before phase 2.
 - **SQLite on that machine.** Not Turso/Postgres.
