@@ -43,7 +43,32 @@ Rules return **404** on a refused update or delete and **400** on a refused crea
 
 ## Render
 
-Render from the rows the server returned. Patch by `data-id` instead of replacing the whole list, so focus and in-progress edits survive. The same `render(rows)` is reused by realtime (`realtime.md`).
+Keep the screen's rows in a `Map` keyed by id. One `render()` reads that map and patches the DOM by `data-id`: insert a missing node, update a changed one, remove a gone one. Never rebuild the list with `innerHTML`; it kills focus and in-progress edits.
+
+```js
+const rows = new Map()
+
+async function load() {
+  const list = await pb.collection('items').getFullList({ filter: pb.filter('owner = {:id}', { id: me }) })
+  rows.clear()
+  for (const r of list) rows.set(r.id, r)
+  render()
+}
+
+function render() {
+  const ul = document.getElementById('list')
+  const seen = new Set()
+  for (const rec of rows.values()) {
+    seen.add(rec.id)
+    let el = ul.querySelector(`[data-id="${rec.id}"]`)
+    if (!el) { el = document.createElement('li'); el.dataset.id = rec.id; ul.append(el) }
+    el.textContent = rec.title
+  }
+  for (const el of ul.querySelectorAll('[data-id]')) if (!seen.has(el.dataset.id)) el.remove()
+}
+```
+
+After a write, put the returned record into the map and call `render()`. This is the whole reactive loop for a static screen. A Live screen adds one subscription that writes into the same map (`realtime.md`); nothing else changes.
 
 ## Not here
 

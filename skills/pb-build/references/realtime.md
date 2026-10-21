@@ -2,31 +2,35 @@
 
 Think like LiveView: the server owns truth, the browser is a projector, clicks become writes, the socket patches only what changed. The live pipe is PocketBase **SSE** (`/api/realtime`), not a second WebSocket server.
 
-Use it only on a screen the spec names as live. If a refresh is enough, do not subscribe.
+**Only on a screen the spec marks Live.** A static screen gets no subscription, even if adding one is easy. If the spec does not say who else writes the data, it is static. Do not upgrade a screen to Live on your own; propose it in the spec and stop.
 
 ## Rules
 
-- Collection subscribe (`'*'`) uses the **ListRule**; single-record subscribe uses the **ViewRule**. `filter` / `expand` / `fields` on subscribe are query options, **not security**.
+- Collection subscribe (`'*'`) uses the **ListRule**; single-record subscribe uses the **ViewRule**. The rule is the lock. `filter` / `expand` / `fields` on subscribe are query options, **not security**.
 - JS hooks **cannot subscribe**. They can **send** custom topics with `SubscriptionMessage`.
 - One user can have many clients (tabs). Presence counts connections unless you dedupe by `auth.id`.
-- Sign in first, then subscribe.
+- Sign in first, then subscribe. The SDK authorizes the SSE client on the first subscribe.
+- The server drops a client that hears nothing for 5 minutes and the SDK reconnects. `PB_CONNECT` fires on every (re)connect. Events sent while the pipe was down are gone.
 
 ## Procedure
 
-1. **Name the record.** One collection is the source of truth for the widget. Typing, carets, "who is here" are not durable rows.
-2. **Rules before socket.** A stranger's subscribe is empty or denied, not merely filtered in JS.
-3. **Same query twice.** The first load and the subscribe share `filter`, `expand`, `fields`.
-4. **Patch by id.** Insert, replace one node, remove one node. Never `innerHTML` the whole list; it kills focus and in-progress edits. Key nodes by `data-id`, not array index.
-5. **Reconnect → reload.** On `PB_CONNECT`, fetch the list again. Events sent while the pipe was down are gone.
-6. **Leave → unsubscribe.** Call the returned unsubscribe on `pagehide`.
+1. **Name the record.** One collection (or one record) is the source of truth for the screen. Typing, carets, "who is here" are not durable rows; they are a live signal (below).
+2. **Rules before socket.** A stranger's subscribe is empty or denied by the rule, not merely filtered in JS.
+3. **One subscription per screen,** filtered to what the screen shows. The first load and the subscribe share `filter`, `expand`, `fields`. Never `'*'` without a filter on a collection that grows.
+4. **Subscribe, then load.** Open the subscription first, then fetch the list. No event lands in the gap.
+5. **Patch by id.** The event writes one row into the same `Map` that `load()` fills, then the same `render()` runs (`data.md`). No second render path.
+6. **Reconnect → reload.** On `PB_CONNECT`, run `load()` again.
+7. **Leave → unsubscribe.** Call the returned unsubscribe on `pagehide` and when the screen is swapped out.
+8. **Quiet.** No toast or flash for a change the user did not make. The row just updates.
 
 ## Client (online, the default)
 
 ```js
 const rows = new Map()
+const filter = pb.filter('list = {:id}', { id: listId })
 
 async function load() {
-  const list = await pb.collection('items').getFullList({ filter: pb.filter('list = {:id}', { id: listId }) })
+  const list = await pb.collection('items').getFullList({ filter })
   rows.clear()
   for (const r of list) rows.set(r.id, r)
   render()
@@ -36,32 +40,18 @@ const unsub = await pb.collection('items').subscribe('*', (e) => {
   if (e.action === 'delete') rows.delete(e.record.id)
   else rows.set(e.record.id, e.record)
   render()
-}, { filter: pb.filter('list = {:id}', { id: listId }) })
+}, { filter })
 
 pb.realtime.subscribe('PB_CONNECT', load)
 window.addEventListener('pagehide', () => unsub())
 await load()
 ```
 
-`render` patches by `data-id`:
-
-```js
-function render() {
-  const list = document.getElementById('list')
-  const seen = new Set()
-  for (const rec of rows.values()) {
-    seen.add(rec.id)
-    let el = list.querySelector(`[data-id="${rec.id}"]`)
-    if (!el) { el = document.createElement('li'); el.dataset.id = rec.id; list.append(el) }
-    el.textContent = rec.title
-  }
-  for (const el of list.querySelectorAll('[data-id]')) if (!seen.has(el.dataset.id)) el.remove()
-}
-```
+`render()` is the one from `data.md`: patch by `data-id`, never `innerHTML` the list.
 
 **Offline variant** (only when they asked for offline): the event goes to `Local.applyRemote(col, e.action, e.record)` and `render` reads `Local.all(col)` on `local:change`. On `PB_CONNECT`, run `sync()` instead of `load()` (`offline-first.md`).
 
-## Custom topic (ephemeral: presence, typing)
+## Live signal: custom topic (presence, typing)
 
 Hook side (send only):
 
@@ -100,10 +90,16 @@ Durable data (messages, cards, bills) belongs in a collection, not a custom topi
 - Test with a raw-socket SSE client: `urllib` keeps the socket alive after `close()`, so a "disconnect" test passes or fails for the wrong reason.
 - The one-minute sweep can resend an unchanged list at any moment. A test that expects "no message in this second" flakes; expect "no change".
 
+## Test (you run it)
+
+Two browser sessions, two members, both on the Live screen. A creates, edits, and deletes a row. B sees each change without touching the page, within a second. B reloads and sees the same list. Then B's network drops and returns: B's list matches A's after `PB_CONNECT`. A guest or a non-member on the same URL sees nothing arrive.
+
 ## Antipatterns
 
-- Realtime everywhere; subscribe `'*'` with no filter on a large collection.
+- A subscription on a screen the spec did not mark Live.
+- Subscribe `'*'` with no filter on a collection that grows.
 - JS filter as access control.
+- A second render path for events instead of the one `render()`.
 - Flash or toast for incoming events the user did not cause.
 - No reload on reconnect; no unsubscribe on leave.
 - Business rules only in browser JS.

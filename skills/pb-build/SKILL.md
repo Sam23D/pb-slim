@@ -4,7 +4,7 @@ description: "Scaffold and build a PB Slim app with the PocketBase SDK."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # Build
@@ -27,11 +27,12 @@ README in human steps: start, open, install, admin, "data is saved on this machi
 ## Build v1
 
 0. **Look first, briefly.** If there is no `DESIGN.md`, run `pb-design` (theme pick in one line). Do not block on polish.
-1. **Collections and rules** as migrations (`references/migrations.md`). Rules are the lock, not the UI.
-2. **Screens** on Basecoat. Data through the PocketBase JS SDK (`references/data.md`). Live updates only on the screens the spec names (`references/realtime.md`).
-3. **Prove the acceptance yourself, online:** do the happy path, refresh, the data is still there. Prove the shell: Install button works, and the installed app opens with the network off. Data may be empty then. That is expected.
-4. **Demo script.** Install, do the job, refresh, expect the save. Say that the installed app opens with no signal, and edits need a connection. Mention admin vs member if both exist.
-5. **Git (only if they use git).** When done, propose one batch of commits split by concern that covers every changed file. Wait for approval, then commit. No push unless asked.
+1. **Collections and rules** as migrations (`references/migrations.md`). Rules are the lock, not the UI. The list rule also decides who receives live events for that collection.
+2. **Screens** on Basecoat. Data through the PocketBase JS SDK (`references/data.md`). Every screen renders through one `render(rows)` that patches by `data-id`, whether or not it is Live.
+3. **Live screens**, only the ones the spec marks Live (`references/realtime.md`). One subscription per screen, filtered to what it shows, gated by the rule, subscribed before the first load, unsubscribed on leave, reloaded on `PB_CONNECT`. Live signals (presence, typing) are a custom topic sent from a hook, never a collection. A screen the spec left static gets no subscription, even if it would be easy.
+4. **Prove the acceptance yourself, online:** do the happy path, refresh, the data is still there. For each Live screen, run the two-session test from the spec: A changes it, B sees it without touching the page. Prove the shell: Install button works, and the installed app opens with the network off. Data may be empty then. That is expected.
+5. **Demo script.** Install, do the job, refresh, expect the save. For a Live screen: open it on two devices, change it on one, watch the other. Say that the installed app opens with no signal, and edits need a connection. Mention admin vs member if both exist.
+6. **Git (only if they use git).** When done, propose one batch of commits split by concern that covers every changed file. Wait for approval, then commit. No push unless asked.
 
 If v1 cannot be demoed without a product decision, stop and ask. Never guess a payment provider, email vendor, or branding. Ceiling items are a TODO comment at most.
 
@@ -47,4 +48,5 @@ If v1 cannot be demoed without a product decision, stop and ask. Never guess a p
 - No `package.json` / bundler for the frontend. One PocketBase process. SQLite on disk.
 - Installed app opens with no signal (the shell). Install button visible on the site. No store listing.
 - Screens call PocketBase. `outbox.js` is not copied and not wired in, unless they asked for offline.
+- Only the screens the spec marks Live subscribe. Each has one filtered subscription, unsubscribes on `pagehide`, and reloads on `PB_CONNECT`. No `'*'` subscribe without a filter.
 - Every vendor file is local and in the service worker cache list.
