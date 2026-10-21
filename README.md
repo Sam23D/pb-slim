@@ -14,11 +14,11 @@ The skills follow the open [Agent Skills](https://agentskills.io/specification) 
 
 | Skill | Job |
 |---|---|
-| `pb-slim` | Entry point: persona, how to talk to a PM, the fixed stack, which skill to use next |
-| `pb-spec` | Discovery, the living spec (online unless they ask for offline), as-built PRD |
-| `pb-review` | Read-only review: ship / cut / later; UX audit |
-| `pb-audit` | Read-only security audit: rules, files, hooks, secrets in the browser |
-| `pb-build` | New app scaffold, then approved v1 online (PocketBase SDK). Outbox only if they asked |
+| `pb-slim` | Entry point: persona, how to talk to a PM, which skill to use next. Stack and defaults in `references/stack.md` |
+| `pb-spec` | Discovery, the living spec, as-built PRD, restyle spec |
+| `pb-review` | Read-only product review: ship / cut / later; UX audit |
+| `pb-audit` | Read-only security audit: rules, files, hooks, secrets in the browser, with a runnable two-client proof |
+| `pb-build` | New app scaffold, then approved v1 online: migrations, PocketBase SDK, realtime on named screens. Offline only when asked |
 | `pb-design` | Basecoat base + per-product theme, signature, voice |
 | `pb-deploy` | One always-on server, files, backups, email, HTTPS. No per-PR test links in this version |
 
@@ -57,12 +57,12 @@ Paths differ between agent versions. Check your agent's docs if a folder above d
 
 ```
 skills/
-  pb-slim/     SKILL.md
-  pb-spec/     SKILL.md, references/as-built-prd.md, assets/spec-template.md
+  pb-slim/     SKILL.md, references/stack.md
+  pb-spec/     SKILL.md, references/{as-built-prd,restyle}.md, assets/spec-template.md
   pb-review/   SKILL.md, references/ux-audit.md
   pb-audit/    SKILL.md, references/checks.md
-  pb-build/    SKILL.md, references/{offline-first,realtime,pocketbase-jsvm,local-dev}.md,
-               assets/{index.html,manifest.webmanifest,sw.js,install.js,outbox.js},
+  pb-build/    SKILL.md, references/{data,migrations,realtime,offline-first,pocketbase-jsvm,local-dev}.md,
+               assets/{index.html,manifest.webmanifest,sw.js}, assets/js/{install,outbox}.js,
                assets/vendor/VERSIONS.json, assets/icons/
   pb-design/   SKILL.md, references/basecoat.md, assets/{theme.css,PRODUCT.md,DESIGN.md}
   pb-deploy/   SKILL.md, references/hosting-and-storage.md

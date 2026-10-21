@@ -1,15 +1,15 @@
 ---
 name: pb-review
-description: Read-only review of a PB Slim (PocketBase) spec or app for a non-engineering PM, sorted into ship in v1, cut, or later, with one sentence of user or schedule impact each. Also runs product-side UX audits. Use when a PM asks "does this make sense", "is this too big", "what's missing", or "review". For who-can-see-this or credential leaks, use pb-audit. Never edits the spec or code unless asked.
+description: "Product review of a PB Slim spec or app: ship, cut, later."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # Review
 
-Persona and fixed stack: `pb-slim`. **Read-only.** Do not edit the spec or code unless asked. After they revise, wait for "review again".
+Persona: `pb-slim`. Stack: `pb-slim/references/stack.md`. Use when a PM asks "does this make sense", "is this too big", "what's missing", or "review". **Read-only.** Do not edit the spec or code unless asked. After they revise, wait for "review again". Who-can-see-this and credential leaks are `pb-audit`, not here.
 
 ## Three buckets only
 
@@ -25,11 +25,10 @@ For each finding: **one sentence on why it matters to the user or the schedule**
 
 - Two products hiding in one spec (split or cut).
 - Staff-only tools mixed into the member happy path (separate them).
-- No outbox, no offline banner, and no phase 1 / phase 2 section unless they asked to work with no signal.
-- When they asked for offline, a feature missing its **phase 1** or **phase 2** section, or its test, or a conflict rule the PM would not accept in plain words.
-- When they asked for offline, a screen that needs a live connection with no product reason. Say what breaks offline.
+- An outbox, an offline banner, or phase 1 / phase 2 sections when nobody asked to work with no signal.
+- When they did ask for offline: a feature missing a phase or its test, or a conflict rule the PM would not accept in plain words.
 - Live updates on screens where nobody else changes the data. A refresh is enough.
-- Permissions so loose a stranger can see others' data. Point them at `pb-audit` for the full check. Judge from server rules, not hidden buttons.
+- Permissions so loose a stranger can see others' data. Name it, then point them at `pb-audit` for the proof.
 - Look changes that need Basecoat components rewritten (Cut or Later), or a product with no signature or voice (`pb-design`).
 - No Install button, or an app store listing in scope.
 

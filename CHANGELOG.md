@@ -1,7 +1,16 @@
 # Changelog
 
-## Unreleased
+## 0.4.0 — 2026-10-20
 
+One release number for the whole pack from here on.
+
+- Every skill description is one short sentence with the trigger first. The "use when" phrases moved into each body.
+- `pb-slim`: the fixed stack, defaults, and "things this stack is not" moved to `references/stack.md`. The router is shorter.
+- `pb-spec`: no Offline line on a normal spec. The offline section is added only when they ask, and its recipe lives in `pb-build`. New `references/restyle.md`.
+- `pb-build`: new `references/data.md` (PocketBase SDK, the default) and `references/migrations.md` (one collection, five rules). The offline branch moved out of the skill body into `offline-first.md`, which now owns setup, phase order, both tests, and the demo script. `realtime.md` shows the online client first; the `Local` variant is marked offline-only. The CI rehearsal server is gone from `local-dev.md`.
+- `pb-audit`: `references/checks.md` has a runnable two-client proof (guest and member B) with expected status codes.
+- `pb-design`: one `theme.css` shape. The starter ships the short version; `assets/theme.css` is the full token list with the font block commented out.
+- `pb-review`, `pb-deploy`: wording only.
 - Blank-app starter ships the pinned libraries and install icons. Versions and checksums: `skills/pb-build/assets/vendor/VERSIONS.json`. PocketBase JS SDK 0.28.1, Basecoat 1.0.2, Tailwind browser build 4.3.3.
 
 ## 0.3.2 — 2026-10-19

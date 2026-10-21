@@ -1,30 +1,30 @@
 ---
 name: pb-audit
-description: Read-only security audit of a PB Slim (PocketBase) app — API rules, file access, hooks that skip rules, and secrets or private rows in the browser. Use when someone asks "is this safe", "who can see this", "security", "credentials", or "does the client leak". Never edits unless asked.
+description: "Security audit of a PB Slim app: rules, files, hooks, leaks."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.1.0"
+  version: "0.4.0"
 ---
 
 # Security audit
 
-Persona and fixed stack: `pb-slim`. **Read-only.** Do not edit the spec or code unless asked. This is not the product review (`pb-review`).
+Persona: `pb-slim`. Stack: `pb-slim/references/stack.md`. Use when someone asks "is this safe", "who can see this", "security", "credentials", or "does the client leak". **Read-only.** Do not edit the spec or code unless asked. This is not the product review (`pb-review`).
 
 Say what a stranger, another member, or the browser can see. One sentence of harm each. Do not print a secret, token, or password you found. Name the file and the kind of secret, and redact the value.
 
-Report a check as passed only if you saw it on the current app. Otherwise say "not checked yet" and how to check it.
+**Say only what you saw.** Report a check as passed only if you ran it on the current app. Otherwise say "not checked yet" and how to check it.
 
 ## What to read
 
 1. Collection rules in `pb_migrations/` and any `pb_hooks` file that sets rules on boot. The boot hook wins. If they disagree, the hook is the truth.
 2. Every file the browser can load: `pb_public/` (HTML, JS, CSS, the service worker, `vendor/`). Also search the repo for files that would be copied into a release.
 3. JS hooks and custom routes. Hooks run as a superuser. A route that sends those records to the browser skips the rules.
-4. Cheat sheet and search list: `references/checks.md`.
+4. Cheat sheet, search list, and the two-client proof: `references/checks.md`.
 
 ## Prove it, do not trust the screen
 
-A hidden button is not a lock. Use two clients when a server is running: a guest (no token) and a second member. For each sensitive collection, try list, view, create-as-someone-else, update of `owner` / `role` / `email`, and the file URL.
+A hidden button is not a lock. Run the two-client proof in `references/checks.md` against a running server: a guest (no token) and a second member. For each sensitive collection, try list, view, create-as-someone-else, update of `owner` / `role` / `email`, and the file URL.
 
 - List rule miss: **200 and an empty list**, not an error. An empty list is not proof the rule is locked.
 - View, update, delete miss: **404**. Locked (`null`, superuser only): **403**.
@@ -44,7 +44,7 @@ If you cannot run the two clients, say "not checked yet". Do not call the rules 
 - The service worker caching `/api/` or `/_/`, including `/api/files/`.
 - A hook or custom route that loads records with the app (superuser) and returns them to the client without checking that caller's rule.
 - Expand or a roster call that returns another member's email, phone, or secret field. Prove it with member B's token. Do not assume a field is hidden.
-- When Offline: on, a pull or outbox that keeps other people's private rows on the device, or that keeps them after sign-out on a shared phone.
+- When they asked for offline: a pull or outbox that keeps other people's private rows on the device, or that keeps them after sign-out on a shared phone.
 
 ## Output
 

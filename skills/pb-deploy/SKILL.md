@@ -1,17 +1,17 @@
 ---
 name: pb-deploy
-description: Put a PB Slim (PocketBase) app on one always-on server and explain it in product terms — persistent disk, HTTPS for the Install button, file storage vs backups, real email, monthly cost. Use when a PM says "put it online", "deploy", "host it", or asks about backups, photos storage, or uptime. Per-PR test links are not in this version.
+description: "Put a PB Slim app on one always-on server, in product terms."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.3.2"
+  version: "0.4.0"
 ---
 
 # Online
 
-Persona and fixed stack: `pb-slim`. Technical detail: `references/hosting-and-storage.md`.
+Persona: `pb-slim`. Stack: `pb-slim/references/stack.md`. Technical detail: `references/hosting-and-storage.md`. Use when a PM says "put it online", "deploy", "host it", or asks about backups, photos storage, or uptime.
 
-One always-on server. Do not offer a test link per pull request, sprites, or a CI workflow. That comes back later in this skill. If they ask, say it is not in this version.
+One always-on server. Per-PR test links, sprites, and CI are not in this version. If they ask, say so and stop.
 
 ## Explain as product ops
 
@@ -30,7 +30,7 @@ One always-on server. Do not offer a test link per pull request, sprites, or a C
 
 ## Done when
 
-- The app opens on HTTPS, the Install button appears, the installed app opens in airplane mode (the shell). Data edits need a connection unless they asked for offline.
+- The app opens on HTTPS, the Install button appears, the installed app opens in airplane mode (the shell).
 - An admin can sign in. Password-reset email arrives in the inbox.
 - A backup exists in its own bucket and the PM knows where.
 - Reply with: the URL, how to sign in as admin, the monthly cost, and what never to delete.

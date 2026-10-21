@@ -1,23 +1,23 @@
 ---
 name: pb-design
-description: Give a PB Slim (PocketBase + Basecoat UI) app its own personality without breaking the shared SaaS base — theme tokens from DESIGN.md, one signature element, and product voice; PRODUCT.md and DESIGN.md templates; 2–3 theme variants for the PM to pick. Use when a PM asks how the app should look, wants it to feel like their brand, or a spec needs its look and feel section.
+description: "Theme, one signature element, and voice on Basecoat."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # Design: Basecoat base, product personality
 
-Persona and fixed stack: `pb-slim`. Basecoat markup and setup: `references/basecoat.md`.
+Persona: `pb-slim`. Basecoat markup and setup: `references/basecoat.md`. Use when a PM asks how the app should look, wants it to feel like their brand, or a spec needs its look and feel section.
 
 ## Rule
 
 Basecoat gives every app the same solid SaaS base. Personality comes from **three things only**:
 
-1. **Theme** — colors, fonts, corner radius, borders vs shadows, density. Source: `DESIGN.md`. Output: `pb_public/css/theme.css`, overriding Basecoat's tokens (`assets/theme.css`). The manifest `theme_color` and `background_color` use the same values. Fonts are self-hosted in `pb_public/vendor/`.
+1. **Theme** — colors, fonts, corner radius, borders vs shadows, density. Source: `DESIGN.md`. Output: `pb_public/css/theme.css`, overriding Basecoat's tokens. The blank app ships a plain `theme.css`; replace its values, keep its shape. Full token list with chart colors: `assets/theme.css`. The manifest `theme_color` and `background_color` use the same values. Fonts are self-hosted in `pb_public/vendor/fonts/`, or stay on `system-ui`.
 2. **One signature element** — something only this product has (a ledger's owed/owes line; a gym app's streak strip). Built from Basecoat parts plus `css/app.css`. Shows on the home screen, the empty state, and the install screen.
-3. **Voice** — words on buttons, empty screens, errors, and the Install button. Add the offline banner only when the spec says Offline: on. Comes from the personality in `PRODUCT.md`. One action keeps one verb through the flow ("Save" → "Saved"). Errors say what happened and how to fix it.
+3. **Voice** — words on buttons, empty screens, errors, and the Install button. Comes from the personality in `PRODUCT.md`. One action keeps one verb through the flow ("Save" → "Saved"). Errors say what happened and how to fix it.
 
 **Never rewrite Basecoat components or invent new ones.** A request that needs that is Later or Cut.
 
@@ -40,5 +40,5 @@ Basecoat gives every app the same solid SaaS base. Personality comes from **thre
 
 - Basecoat markup untouched; no new component framework.
 - Signature visible in at least 3 places.
-- The same verb through each flow. The Install button uses the product voice. The offline banner does too, only when Offline: on.
-- Contrast passes; the theme works offline (no CDN fonts).
+- The same verb through each flow. The Install button uses the product voice.
+- Contrast passes; no remote fonts, so the shell opens with no signal.
