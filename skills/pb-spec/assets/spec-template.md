@@ -31,6 +31,13 @@ Time to demo: <10> minutes.
 | Member | | |
 | Staff | | |
 
+## Screens
+
+| Screen | Who looks at it | Static or Live | Live: watches / who else writes it |
+|---|---|---|---|
+| <Home> | Member | Static | |
+| <Shared list> | Member | Live | `items` where `list = this list` / other members of the list |
+
 ## Happy path
 
 1. …
@@ -42,7 +49,7 @@ Time to demo: <10> minutes.
 
 ## Risks
 
-- If the server is off, you cannot save. Live lists freeze.
+- If the server is off, you cannot save. Live screens freeze.
 - A refused write shows the old value and a short reason. Typed text is not dropped.
 
 ## Acceptance
@@ -51,6 +58,7 @@ Time to demo: <10> minutes.
 2. Do the happy path.
 3. Refresh. Expect the changes to still show.
 4. Turn the network off. Expect the installed app to open. Edits can wait until the network is back.
+5. For each Live screen: two members, two devices. A changes <item>. Expect B to see it without touching the page, within a second. B reloads. Expect the same.
 
 ## Open questions
 
@@ -65,6 +73,7 @@ Time to demo: <10> minutes.
 - **Screens:** `pb_public/<page>.html`, `pb_public/js/<page>.js`.
 - **Install:** manifest; service worker caches shell + vendor; Install button.
 - **Data:** PocketBase directly. No outbox.
-- **Live updates:** <screens, or none>.
+- **Live:** <screen>: subscribe `items` filter `list = {:id}`, gated by the `items` list rule. <Or: none.>
+- **Live signals:** <presence topic `presence/<room>`, members only. Or: none.>
 - **Tasks:**
   - …

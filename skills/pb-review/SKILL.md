@@ -4,7 +4,7 @@ description: "Product review of a PB Slim spec or app: ship, cut, later."
 license: MIT
 metadata:
   author: sam23d
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # Review
@@ -27,7 +27,9 @@ For each finding: **one sentence on why it matters to the user or the schedule**
 - Staff-only tools mixed into the member happy path (separate them).
 - An outbox, an offline banner, or phase 1 / phase 2 sections when nobody asked to work with no signal.
 - When they did ask for offline: a feature missing a phase or its test, or a conflict rule the PM would not accept in plain words.
-- Live updates on screens where nobody else changes the data. A refresh is enough.
+- A screen marked Live where nobody else changes the data while the user looks at it. A refresh is enough; make it static.
+- A Live screen with no "watches" line or no two-session test.
+- A screen that clearly shows other people's changes (a shared list, a board, a lobby) left static with no reason given. Say what the user will miss.
 - Permissions so loose a stranger can see others' data. Name it, then point them at `pb-audit` for the proof.
 - Look changes that need Basecoat components rewritten (Cut or Later), or a product with no signature or voice (`pb-design`).
 - No Install button, or an app store listing in scope.

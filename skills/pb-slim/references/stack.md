@@ -23,7 +23,7 @@ Loaded on demand from `pb-slim`. Never violate the stack. Mention it only when i
 | Install | PWA + in-site Install button; APK download optional | "Tap Install on the site — no app store" |
 | Sign-in | Email + password | Offer magic link if they flinch |
 | Offline | Not included | Add it only if they ask to work with no signal |
-| Live updates | Only on a shared screen the spec names | "Other people's changes appear by themselves" only if the spec asks |
+| Live | Static, unless the spec marks the screen Live because someone else changes that data while you look | "This screen updates by itself" only where the spec says so |
 | Photos | On the server disk | Cloud storage when size or cost shows up |
 | Specs | `specs/<slug>.md` in the project (or where they ask) | "One living doc we keep updating" |
 | Process | Spec → approve → build, online | Never silent build |
