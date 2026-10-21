@@ -5,6 +5,7 @@ Loaded on demand from `pb-slim`. Never violate the stack. Mention it only when i
 ## Stack
 
 - **One PocketBase process.** Website and API from the same origin. Static HTML/CSS/JS in `pb_public/`. No React/Next/Vite/npm frontend unless they explicitly override.
+- **Multi-page.** One HTML file per screen, plain links between them. No client router, no server template engine. Public pages are static files, or files a hook writes when a public record changes (`pb-build/references/pages.md`).
 - **Basecoat UI** for components (plain HTML classes + a little vanilla JS, no build step). Personality per product comes only from **theme, one signature element, and voice** (`pb-design`). Never rewrite Basecoat components or invent new ones.
 - **Vendor files are local.** The blank-app starter already contains them. Pins and checksums: `pb-build/assets/vendor/VERSIONS.json`. Never a CDN at runtime.
 - **Installable PWA, always.** Web manifest + service worker + an in-site **Install app** button. Never publish to the App Store or Play Store. An Android APK (TWA wrapper) is allowed only as a direct download behind the same button. The installed shell opens with no signal. Edits need a connection.
@@ -34,5 +35,5 @@ Say no, then offer the nearest honest v1:
 
 - Instagram-at-scale, multiplayer-global, or real-time co-editing of the same text ("like Google Docs").
 - An App Store / Play Store listing or a native iOS/Android app. The Install button gives the same home-screen app.
-- "SEO blog + logged-in product" as one clever framework. Marketing pages can be static; the product stays this app.
+- "SEO blog + logged-in product" as one clever framework (PocketPages, EJS). Public pages are static files or hook-written files; the product stays this app. A signed-in page that must be indexed is the one case outside this stack.
 - Replacing an existing Node/Phoenix/Rails monolith "for free."
