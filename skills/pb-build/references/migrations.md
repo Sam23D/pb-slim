@@ -43,4 +43,4 @@ migrate((app) => {
 - Shared rows (a team, a household): list/view through a membership relation, write by owner or a named role. Add an owner clause so the creator can see the row before any membership row exists.
 - Staff-only writes: `null`, never `""`.
 - Public sign-up: `users.createRule = ""`. Roster for members: list/view `@request.auth.id != ""` and request `fields: "id,name"` so emails stay off the page.
-- Changing a rule later: a new migration that loads the collection, sets the rule, saves. If a boot hook re-applies rules, change both or the hook reverts it.
+- Changing a field or a rule on a collection with rows: `changes.md`. A rule change is a new migration that loads the collection, sets the rule, saves. If a boot hook re-applies rules, change both or the hook reverts it.

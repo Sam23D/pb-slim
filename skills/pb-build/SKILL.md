@@ -40,6 +40,7 @@ If v1 cannot be demoed without a product decision, stop and ask. Never guess a p
 
 ## Server rules and hooks
 
+- Changing a collection that already has rows (add, rename, remove a field), or bumping the PocketBase server: `references/changes.md`. Back up first.
 - Permissions go in collection rules first. Hooks only for email, webhooks, derived rows, or "after signup do X".
 - PocketBase JS hook pitfalls (helpers, rule re-apply, delete hooks, 404 vs 403): `references/pocketbase-jsvm.md`.
 
