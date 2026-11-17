@@ -16,7 +16,7 @@ await pb.collection('users').create({ email, password, passwordConfirm: password
 pb.authStore.clear()   // sign out
 ```
 
-Show `errorMessage(err)`. Do not show the raw error object.
+Show `errorMessage(err)`. Do not show the raw error object. Password reset, email codes, verified email, Google: `auth.md`.
 
 ## Read, write
 

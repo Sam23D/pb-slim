@@ -24,7 +24,7 @@ Loaded on demand from `pb-slim`. Never violate the stack. Mention it only when i
 | UI | Plain HTML/JS + Basecoat | "Simple pages, no heavy app framework" |
 | Look | Basecoat base + product theme, one signature, own voice | "Same solid base, its own colors and words" |
 | Install | PWA + in-site Install button; APK download optional | "Tap Install on the site — no app store" |
-| Sign-in | Email + password | Offer magic link if they flinch |
+| Sign-in | Email + password | Offer an email code if they flinch (`pb-build/references/auth.md`) |
 | Offline | Not included | Add it only if they ask to work with no signal |
 | Live | Static, unless the spec marks the screen Live because someone else changes that data while you look | "This screen updates by itself" only where the spec says so |
 | Photos | On the server disk | Cloud storage when size or cost shows up |
