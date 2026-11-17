@@ -1,0 +1,12 @@
+# Local dev: one app, one PocketBase. Per app, change `name` and PB_PORT (8090, 8091, ...).
+name: pb-app
+services:
+  pb:
+    build: .
+    ports: ["127.0.0.1:${PB_PORT:-8090}:8080"]
+    volumes:
+      - ./pb_data:/pb/pb_data              # the data: never delete, never commit
+      - ./pb_migrations:/pb/pb_migrations
+      - ./pb_hooks:/pb/pb_hooks            # hook edits reload by themselves
+      - ./pb_public:/pb/pb_public          # page edits: just reload the tab
+    restart: unless-stopped

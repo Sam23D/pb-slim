@@ -17,8 +17,8 @@ Build **only** what the approved spec calls v1, or the approved feature section.
 
 ## New app — done when a PM can click
 
-1. Start one PocketBase process with `pb_public/`, `pb_hooks/`, `pb_migrations/` from the project (`references/local-dev.md`). Never start a second process for another app.
-2. Copy the starter into `pb_public/`: `index.html`, `manifest.webmanifest`, `sw.js`, `css/`, `js/install.js`, `js/app.js`, `icons/`, and `vendor/`. The pinned libraries are already inside. Do not re-download them. Do **not** copy `js/outbox.js`. Pins and checksums: `assets/vendor/VERSIONS.json`.
+1. Start one PocketBase process for this app (`references/local-dev.md`). Copy `assets/root/` (`Dockerfile`, `compose.yaml`, `.dockerignore`, `.gitignore`) to the project root, set `name:` in `compose.yaml` and a free `PB_PORT`, and create `pb_hooks/` and `pb_migrations/` with a `.gitkeep` each (the Dockerfile copies them). Never serve two apps from one process.
+2. Copy the starter into `pb_public/`: `index.html`, `manifest.webmanifest`, `sw.js`, `css/`, `js/install.js`, `js/app.js`, `icons/`, and `vendor/`. The pinned libraries are already inside. Do not re-download them. Do **not** copy `js/outbox.js` or `root/`. Pins and checksums: `assets/vendor/VERSIONS.json`.
 3. Prove it: the page loads, the **Install app** button works, the installed app opens in airplane mode (the shell; there is no product data yet).
 4. Reply in everyday words: the URL, how to install, how to create the first admin (`/_/`), and "Tell me the first user and the first job, and I'll write the v1 spec."
 
