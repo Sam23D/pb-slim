@@ -24,9 +24,10 @@ One always-on server. Per-PR test links, sprites, and CI are not in this version
 
 ## You decide
 
-- Pick the host (a single Fly.io machine with a volume, or a cheap VPS). Do not make the PM choose unless cost or risk differs.
+- Pick the host (a single Fly.io machine with a volume, or a cheap VPS). Do not make the PM choose unless cost or risk differs. Fly: `assets/fly.toml` + the steps in `references/hosting-and-storage.md`.
 - Tell them the **monthly ballpark** and the **one thing they must not delete** (the data disk).
 - Never scale to more than one server. If they need that, the product is past this stack.
+- Before you say "done", run the settings list in `references/hosting-and-storage.md` (name and URL, mail, backups, rate limits).
 
 ## Done when
 

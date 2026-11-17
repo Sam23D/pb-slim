@@ -4,9 +4,32 @@
 
 PocketBase is one always-on process + local SQLite (WAL) on a **persistent volume**. Official guidance: no other databases; scale vertically. Sleep / autostop breaks login, sync, and realtime.
 
-- **Fly.io:** one Machine, volume mounted at the data dir (e.g. `/pb/pb_data`), bind `0.0.0.0:$PORT`. Never scale count > 1. Turn autostop off.
+- **Fly.io:** one Machine, volume mounted at the data dir (`/pb/pb_data`). Never scale count > 1. Autostop off. Steps below.
 - **VPS:** upload the binary, `pocketbase serve yourdomain.com` (built-in Let's Encrypt) or put it behind a reverse proxy. Persist `pb_data`.
 - HTTPS is required for service workers and the install prompt (`localhost` is fine for development).
+
+## Fly.io, step by step
+
+The project already has the starter `Dockerfile` (pinned PocketBase). Copy `assets/fly.toml` to the project root and set `app` (globally unique, e.g. `pb-<app>`) and `primary_region`.
+
+```sh
+fly launch --no-deploy --copy-config --name pb-<app>
+fly volumes create pb_data --size 1 --region <region> --yes
+fly deploy --ha=false                       # one Machine; the default makes two
+fly ssh console -C "/pb/pocketbase superuser upsert EMAIL PASSWORD"
+fly certs add <app.example.com>             # custom domain; then the DNS records it prints
+```
+
+- Roll back: `fly releases --image`, then `fly deploy --image <previous image>`. Migrations already applied stay applied; restore the backup if they changed data (`pb-build/references/changes.md`).
+- Cost: say a number from fly.io/pricing for the Machine size + 1 GB volume, per month. Do not guess.
+
+## After the first deploy: settings (Dashboard → Settings)
+
+1. **Application:** name and URL (the https address). Unset, emails say "Acme" and link to `localhost`.
+2. **Mail:** SMTP from a real mail service, sender name and address. Send the test email.
+3. **Backups:** cron `0 3 * * *`, keep 7, **S3 on**, pointing at the backup bucket (not the files bucket). Press **Create backup** once and check the file is in the bucket.
+4. **Rate limits:** turn on (off by default).
+5. **Files storage:** S3 only when uploads get large; a different bucket from backups.
 
 ## Do not use Turso / remote databases
 
