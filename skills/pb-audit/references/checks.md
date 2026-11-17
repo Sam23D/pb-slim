@@ -38,7 +38,7 @@ curl -s "$PB/api/collections/items/records"
 # 2. Member B token.
 TOKEN_B=$(curl -s -X POST "$PB/api/collections/users/auth-with-password" \
   -H 'content-type: application/json' \
-  -d '{"identity":"zz-test-b@example.com","password":"<B password>"}' | python3 -c 'import json,sys; print(json.load(sys.stdin)["token"])')
+  -d '{"identity":"zz-test-b@example.com","password":"<B password>"}' | sed -n 's/.*"token":"\([^"]*\)".*/\1/p')
 # 3. B lists: expect only B's rows (none if B has no rows).
 curl -s "$PB/api/collections/items/records" -H "Authorization: $TOKEN_B"
 # 4. B views A's row: expect 404.

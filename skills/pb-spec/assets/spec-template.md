@@ -59,7 +59,7 @@ Time to demo: <10> minutes.
 1. Install the app.
 2. Do the happy path.
 3. Refresh. Expect the changes to still show.
-4. Turn the network off. Expect the installed app to open. Edits can wait until the network is back.
+4. Turn the network off. Expect the installed app to open. Try an edit. Expect a short message that it needs a connection, and the typed text still there.
 5. For each Live screen: two members, two devices. A changes <item>. Expect B to see it without touching the page, within a second. B reloads. Expect the same.
 
 ## Open questions

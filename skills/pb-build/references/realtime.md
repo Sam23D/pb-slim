@@ -56,18 +56,22 @@ await load()
 Hook side (send only):
 
 ```js
-function pushTopic(name, data, keep) {
-  const message = new SubscriptionMessage({ name: name, data: JSON.stringify(data) })
-  const clients = $app.subscriptionsBroker().clients()
-  for (const id in clients) {
-    const c = clients[id]
-    if (c.hasSubscription(name) && keep(c)) c.send(message)
-  }
+// pb_hooks/topics.js — a module, not a .pb.js file (top-level functions are not in scope in handlers; pocketbase-jsvm.md)
+module.exports = {
+  pushTopic: function (app, name, data, keep) {
+    const message = new SubscriptionMessage({ name: name, data: JSON.stringify(data) })
+    const clients = app.subscriptionsBroker().clients()
+    for (const id in clients) {
+      const c = clients[id]
+      if (c.hasSubscription(name) && keep(c)) c.send(message)
+    }
+  },
 }
 
+// pb_hooks/presence.pb.js — guests may not subscribe to a presence topic
 onRealtimeSubscribeRequest((e) => {
   for (const sub of e.subscriptions) {
-    if (String(sub).startsWith('admin_') && !e.client.get('auth')) {
+    if (String(sub).startsWith('presence/') && !e.client.get('auth')) {
       throw new ForbiddenError('unauthorized subscription')
     }
   }
@@ -75,7 +79,7 @@ onRealtimeSubscribeRequest((e) => {
 })
 ```
 
-Browser: `pb.realtime.subscribe('lists/' + id + '/presence', (data) => { /* patch a presence strip */ })`.
+Browser: `pb.realtime.subscribe('presence/' + roomId, (data) => { /* patch a presence strip */ })`.
 
 Durable data (messages, cards, bills) belongs in a collection, not a custom topic: then rules, admin, and backups come free.
 

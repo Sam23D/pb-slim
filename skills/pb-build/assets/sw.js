@@ -1,7 +1,7 @@
 // sw.js — app shell cache. Do not cache /api/ or /_/. Data comes from the server.
 // Bump VERSION on every release. List every page and every vendor file in SHELL.
 // Hook-written public pages under /p/ are not listed; the browser cache is enough.
-// Also bump ?v=<release> on /css and /js links in the HTML (and here), or open tabs keep old code.
+// A new VERSION refetches every SHELL file (cache: 'reload'); no ?v= query strings needed.
 const VERSION = 'app-v1';
 const SHELL = [
   '/',

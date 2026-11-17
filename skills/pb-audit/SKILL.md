@@ -35,7 +35,7 @@ If you cannot run the two clients, say "not checked yet". Do not call the rules 
 
 - A rule of `""` (anyone, including guests) on a collection that holds private rows, emails, phones, notes, or files. `null` is locked. An expression is a filter. People mix these up.
 - Create that does not pin the owner: `@request.body.owner = @request.auth.id` (use the real field name). Anyone can write the row as someone else.
-- Update that lets the client change `owner`, `role`, `email`, or a staff flag. Require `:changed = false` (or `:isset = false`) on that field.
+- Update that lets the client change `owner`, `role`, `email`, or a staff flag. Require `@request.body.<field>:changed = false` on that field (`pb-build/references/migrations.md`).
 - `manageRule` set so one user can change another user's email or password, unless the spec says a staff member may.
 - A custom field named like a secret (`password`, `pin`, `token`, `secret`, `api_key`). It is returned with the record whenever list or view allows it. Auth passwords are not. Custom text fields are.
 - A `file` field that is not **Protected**, when the file is private (receipt, ID, contract, medical note). Knowing the URL is enough. A tight view rule does **not** hide an unprotected file. Public avatars may stay unprotected. Say which.

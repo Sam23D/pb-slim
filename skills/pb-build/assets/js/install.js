@@ -7,7 +7,7 @@
     var hadController = !!navigator.serviceWorker.controller;
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/sw.js').then(function (reg) {
-        // Hash-route tabs never navigate: check for a new release when the tab comes back.
+        // An installed app can stay open for days: check for a new release when the tab comes back.
         document.addEventListener('visibilitychange', function () { if (!document.hidden) reg.update(); });
         setInterval(function () { reg.update(); }, 30 * 60 * 1000);
       });

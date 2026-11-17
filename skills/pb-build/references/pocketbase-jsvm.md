@@ -19,31 +19,9 @@ onRecordAfterCreateSuccess((e) => {
 
 ## Collections and rules
 
-`new Collection({ ..., listRule })` may ignore rule fields on the first save. Save, then set rules, then save again:
+Migration shape, autodate fields, and copy-ready rules (owner pin, owner freeze, roster, staff-only): `migrations.md`. Do not restate them here.
 
-```js
-const items = new Collection({ type: "base", name: "items", fields: [/* ... */] })
-app.save(items)
-const authed = '@request.auth.id != ""'
-items.listRule = authed
-items.viewRule = authed
-items.createRule = authed
-items.updateRule = 'owner = @request.auth.id'
-items.deleteRule = 'owner = @request.auth.id'
-app.save(items)
-```
-
-- Public register: `users.createRule = ""`. Staff-only: `null`. Roster for members: list/view `authed`, and request `fields: "id,name"` so emails stay off the page.
-- Author-only rows: create `@request.body.owner = @request.auth.id`; update `owner = @request.auth.id && (@request.body.owner:isset = false || @request.body.owner = @request.auth.id)`.
 - If an `onBootstrap` hook re-applies rules on every start, a rule change needs **both** that hook and a migration, or the hook silently reverts it. Grep `pb_hooks` before changing rules.
-
-## Offline fields (only when they asked for offline)
-
-- Client-made ids: PocketBase accepts an `id` on create (15 chars, `[a-z0-9]`). The outbox uses this so the same id works on the device and the server.
-
-## Every collection
-
-- Add `created` / `updated` **autodate** fields to every collection you create with a custom field list. Without them, `sort=-created` returns 400 and pages hang on "Loading…". Full migration shape: `migrations.md`.
 
 ## Gotchas
 
