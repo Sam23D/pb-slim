@@ -1,5 +1,15 @@
 {
-  "note": "Pins for the blank-app starter. To bump one library: download that tarball, replace its folder, then change the version here and the matching path in index.html and sw.js. Do not scrape a CDN.",
+  "note": "Pins for the blank-app starter. To bump one library: download that tarball, replace its folder, then change the version here and the matching path in index.html and sw.js. Do not scrape a CDN. To bump the server: change server.version and the sha256 values from that release's checksums.txt; the Dockerfile ARG must match.",
+  "server": {
+    "name": "PocketBase",
+    "version": "0.40.6",
+    "release": "https://github.com/pocketbase/pocketbase/releases/tag/v0.40.6",
+    "zips": {
+      "linux_amd64": "0e1f609158ed945f809f8a02ae012aa0427129c66ebb63c1aee76f2c0309373f",
+      "linux_arm64": "d22c66ceb67ca92b7d767f36d826e848a276bcfa3c197ead20bf87c42208984f",
+      "darwin_arm64": "7f2f7544e9ee5994ab69f84b22a4ab9a3bcfed58c1dad7206d05ebeb753f968b"
+    }
+  },
   "libs": [
     {
       "name": "PocketBase JS SDK",

@@ -9,6 +9,7 @@ Loaded on demand from `pb-slim`. Never violate the stack. Mention it only when i
 - **Basecoat UI** for components (plain HTML classes + a little vanilla JS, no build step). Personality per product comes only from **theme, one signature element, and voice** (`pb-design`). Never rewrite Basecoat components or invent new ones.
 - **Tailwind browser build** for layout utilities only (`grid`, `gap-4`, `flex`). Basecoat's CSS ships components, not utilities. It compiles classes in the browser (~280 KB, cached by the service worker). No Tailwind CLI, no config file. Tokens stay in `theme.css`, not in Tailwind.
 - **Vendor files are local.** The blank-app starter already contains them. Pins and checksums: `pb-build/assets/vendor/VERSIONS.json`. Never a CDN at runtime.
+- **PocketBase server version is pinned** in the same file (`server`). Every app runs that version until someone bumps it on purpose.
 - **Installable PWA, always.** Web manifest + service worker + an in-site **Install app** button. Never publish to the App Store or Play Store. An Android APK (TWA wrapper) is allowed only as a direct download behind the same button. The installed shell opens with no signal. Edits need a connection.
 - **Online always.** Screens talk to PocketBase through the JS SDK. Do not add IndexedDB, an outbox, or an offline banner unless they ask to work with no signal. If they ask, `pb-build/references/offline-first.md` owns the rest.
 - **SQLite on that machine.** Not Turso/Postgres.
