@@ -5,8 +5,8 @@ The app is multi-page. One URL is one screen. No client router, no single `index
 ## Signed-in screens
 
 - One file per screen: `index.html` (home), `lists.html`, `list.html?id=…`, `settings.html`. Plain `<a href>` between them.
-- Every page loads the same head: `theme.css`, `app.css`, the vendor files, `js/app.js` (the SDK client and the auth guard), `js/install.js`. Then its own `js/<page>.js` with that screen's `rows` Map and `render()` (`data.md`).
-- The auth guard in `app.js` sends a signed-out visitor to `index.html`. Do it before the first paint: `if (!pb.authStore.isValid && location.pathname !== '/') location.replace('/')`.
+- Every page loads the same head: `theme.css`, `app.css`, the vendor files, `js/app.js` (the starter ships it: SDK client, auth guard, `errorMessage`, `toast`), `js/install.js`. Then its own `js/<page>.js` with that screen's `rows` Map and `render()` (`data.md`).
+- The auth guard in `app.js` sends a signed-out visitor to `/`, where the sign-in form is. Pages it must not guard go in its `HOME` list.
 - The query string carries the record id. Read it once: `const id = new URLSearchParams(location.search).get('id')`. If it is missing or the record 404s, show a short message with a link home. Do not redirect in a loop.
 - A Live screen subscribes in its own `js/<page>.js`. The page going away ends the subscription; still call unsubscribe on `pagehide` (`realtime.md`).
 - Add every page to `SHELL` in `sw.js`, so each opens with no signal. The `navigate` fallback stays `/index.html`.

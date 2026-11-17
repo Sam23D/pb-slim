@@ -4,11 +4,7 @@ The default for every screen. `pocketbase.umd.js` is vendored by the starter and
 
 ## One client
 
-```js
-// js/app.js
-const pb = new PocketBase(location.origin)   // same origin, no base URL to configure
-window.pb = pb
-```
+The starter's `js/app.js` already makes it: `const pb = new PocketBase(location.origin)`, also on `window.pb`. It also holds the auth guard, `errorMessage(err)`, and `toast(title, category)`. Keep them; add screen code in `js/<page>.js`.
 
 The SDK keeps the auth token in `localStorage`, so a reload stays signed in. `pb.authStore.isValid` tells you whether to show the sign-in screen.
 
@@ -20,7 +16,7 @@ await pb.collection('users').create({ email, password, passwordConfirm: password
 pb.authStore.clear()   // sign out
 ```
 
-Show the error message from `err.response?.message` or the first field error in `err.response?.data`. Do not show the raw error object.
+Show `errorMessage(err)`. Do not show the raw error object.
 
 ## Read, write
 
@@ -39,7 +35,19 @@ await pb.collection('items').delete(id)
 
 ## Refused writes
 
-Rules return **404** on a refused update or delete and **400** on a refused create. The screen keeps the old value, shows a short reason, and never drops typed text. Map the status to plain copy in one helper and call it from every write.
+Rules return **404** on a refused update or delete and **400** on a refused create. The screen keeps the old value, shows a short reason, and never drops typed text. Every write uses the starter helper:
+
+```js
+try {
+  const rec = await pb.collection('items').update(id, { title })
+  rows.set(rec.id, rec)
+  render()
+} catch (err) {
+  toast(errorMessage(err), 'error')   // old value stays in rows; the input keeps the typed text
+  return
+}
+toast('Saved')   // after the try/catch, so a toast problem never looks like a failed save
+```
 
 ## Render
 
