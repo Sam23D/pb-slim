@@ -47,7 +47,7 @@ Paths differ between agent versions. Check your agent's docs if a folder above d
 ## Optional companions
 
 - **impeccable** (design skill): if installed, `pb-design` uses it to write PRODUCT.md / DESIGN.md and to critique screens. Without it, `pb-design` uses its own templates.
-- **Node.js**: only for optional checks (`node --check` on scripts). The apps themselves need no Node.
+- **Node.js**: only for the pack check, `node scripts/check.mjs` (pins, checksums, links, JS syntax). Run it before every release. The apps themselves need no Node.
 
 ## Start
 
