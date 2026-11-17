@@ -16,10 +16,11 @@ To bump a library later:
 ## Page `<head>` order
 
 1. Tailwind browser script.
-2. Inline `<style type="text/tailwindcss">@theme { … }</style>`. The browser build reads `@theme` **only from inline blocks**, not linked files.
-3. `vendor/basecoat-<v>/basecoat.cdn.min.css`
-4. `css/theme.css` — token overrides (`pb-design`).
-5. `css/app.css` — app-only parts (signature, lists, charts).
+2. `vendor/basecoat-<v>/basecoat.cdn.min.css`
+3. `css/theme.css` — token overrides (`pb-design`).
+4. `css/app.css` — app-only parts (signature, lists, charts).
+
+The starter `index.html` already has this order. Tailwind is for layout utilities only; colors and fonts come from `theme.css`. Only if a page needs a custom utility, add an inline `<style type="text/tailwindcss">@theme { … }</style>` after the Tailwind script: the browser build reads `@theme` **only from inline blocks**, not linked files.
 
 Scripts get `defer`: `basecoat.min.js` first, then component scripts.
 

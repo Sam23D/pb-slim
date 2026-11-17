@@ -4,7 +4,7 @@ Agent skills that turn an AI coding agent into a product partner for **non-engin
 
 - **Installable:** every app is a PWA with an "Install app" button on the site. No app stores. The installed app opens with no signal. Edits need a connection.
 - **Online always.** Screens talk to PocketBase. An outbox is added only when they ask to work with no signal.
-- **Boring stack:** one PocketBase process, plain HTML/CSS/JS, [Basecoat UI](https://basecoatui.com) components, SQLite on disk.
+- **Boring stack:** one PocketBase process, plain HTML/CSS/JS, [Basecoat UI](https://basecoatui.com) components, the Tailwind browser build for layout, SQLite on disk.
 - **Personality per product:** Basecoat gives the solid SaaS base. Each product adds its own theme, one signature element, and voice.
 - **Spec before build:** the agent writes a living spec (v1 floor + later ceiling), reviews it in ship / cut / later, and builds only when asked.
 
