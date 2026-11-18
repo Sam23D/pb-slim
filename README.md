@@ -61,11 +61,14 @@ skills/
   pb-spec/     SKILL.md, references/{as-built-prd,restyle}.md, assets/spec-template.md
   pb-review/   SKILL.md, references/ux-audit.md
   pb-audit/    SKILL.md, references/checks.md
-  pb-build/    SKILL.md, references/{pages,data,migrations,realtime,offline-first,pocketbase-jsvm,local-dev}.md,
-               assets/{index.html,manifest.webmanifest,sw.js}, assets/js/{install,outbox}.js,
+  pb-build/    SKILL.md, references/{pages,data,migrations,changes,auth,realtime,offline-first,pocketbase-jsvm,local-dev}.md,
+               assets/{index.html,manifest.webmanifest,sw.js}, assets/js/{app,install,outbox}.js, assets/css/,
+               assets/root/{Dockerfile,compose.yaml,.dockerignore,.gitignore},
                assets/vendor/VERSIONS.json, assets/icons/
   pb-design/   SKILL.md, references/basecoat.md, assets/{theme.css,PRODUCT.md,DESIGN.md}
-  pb-deploy/   SKILL.md, references/hosting-and-storage.md
+  pb-deploy/   SKILL.md, references/hosting-and-storage.md, assets/fly.toml
+scripts/
+  check.mjs    pack consistency check: node scripts/check.mjs
 ```
 
 ## License

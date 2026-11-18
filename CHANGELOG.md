@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+Starter that runs as shipped, coverage for apps with data, and a pack check.
+
+- Fixes: one owner-freeze rule (`:changed = false`, checked on 0.40.6) with its home in `migrations.md`; `pocketbase-jsvm.md` no longer restates rules; the two-client proof parses the token with `sed`, not `python3`; the presence example uses a `require`d module and one topic name; stale `?v=` and hash-route notes removed; the offline acceptance step matches the online default.
+- `pb-build`: the starter `js/app.js` is real (SDK client, auth guard, `errorMessage`, safe `toast`). New `assets/root/` with a `Dockerfile` (pinned server, sha256-checked) and `compose.yaml`. New `references/changes.md` (add, rename, remove fields; bump the server; back up first) and `references/auth.md` (reset, email codes, verification, Google).
+- `pb-deploy`: `assets/fly.toml`, Fly step-by-step, rollback, and a post-deploy settings list (name and URL, SMTP, S3 backups, rate limits).
+- `pb-slim/references/stack.md`: names the Tailwind browser build (layout only) and the pinned server.
+- `VERSIONS.json`: PocketBase server 0.40.6 with zip checksums.
+- `AGENTS.md`: a skill index pointing at `pb-slim` instead of a second routing table.
+- Every skill description starts with its trigger phrases again.
+- `scripts/check.mjs`: pins, checksums, links, versions, JS syntax. Run before a release.
+
 ## 0.6.0 — 2026-10-20
 
 Multi-page by default. Public pages are files, never rendered per request.
