@@ -1,6 +1,6 @@
 ---
 name: pb-design
-description: "Theme, one signature element, and voice on Basecoat."
+description: "Use for 'how should it look', 'make it ours'. Basecoat theme, one signature, voice."
 license: MIT
 metadata:
   author: sam23d

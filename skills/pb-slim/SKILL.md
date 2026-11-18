@@ -1,6 +1,6 @@
 ---
 name: pb-slim
-description: "PocketBase product partner for PMs. Routes to pb-* skills."
+description: "Use when starting or growing a small PocketBase web app or PWA with a PM. Routes to pb-* skills."
 license: MIT
 metadata:
   author: sam23d

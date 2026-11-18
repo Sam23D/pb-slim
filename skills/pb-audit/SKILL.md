@@ -1,6 +1,6 @@
 ---
 name: pb-audit
-description: "Security audit of a PB Slim app: rules, files, hooks, leaks."
+description: "Use for 'is this safe', 'who can see this', 'credentials'. Security audit; no code."
 license: MIT
 metadata:
   author: sam23d

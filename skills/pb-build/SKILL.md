@@ -1,6 +1,6 @@
 ---
 name: pb-build
-description: "Scaffold and build a PB Slim app with the PocketBase SDK."
+description: "Use for 'start a blank app', 'build it', 'ship v1', migrations, hooks, auth. Builds on PocketBase."
 license: MIT
 metadata:
   author: sam23d

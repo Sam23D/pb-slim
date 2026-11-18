@@ -1,6 +1,6 @@
 ---
 name: pb-deploy
-description: "Put a PB Slim app on one always-on server, in product terms."
+description: "Use for 'put it online', 'deploy', backups, email, uptime. One always-on server."
 license: MIT
 metadata:
   author: sam23d

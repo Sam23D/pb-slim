@@ -1,6 +1,6 @@
 ---
 name: pb-spec
-description: "Living product spec for a PB Slim app. Writes, never builds."
+description: "Use for 'users should…', 'write the spec', 'what does the app do today'. Living spec; never builds."
 license: MIT
 metadata:
   author: sam23d

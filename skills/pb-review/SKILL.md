@@ -1,6 +1,6 @@
 ---
 name: pb-review
-description: "Product review of a PB Slim spec or app: ship, cut, later."
+description: "Use for 'review', 'is this too much', 'what is missing'. Ship / cut / later; no code."
 license: MIT
 metadata:
   author: sam23d
