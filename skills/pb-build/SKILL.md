@@ -4,7 +4,7 @@ description: "Use for 'start a blank app', 'build it', 'ship v1', migrations, ho
 license: MIT
 metadata:
   author: sam23d
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # Build

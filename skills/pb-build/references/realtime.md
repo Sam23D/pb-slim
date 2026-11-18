@@ -10,7 +10,7 @@ Think like LiveView: the server owns truth, the browser is a projector, clicks b
 - JS hooks **cannot subscribe**. They can **send** custom topics with `SubscriptionMessage`.
 - One user can have many clients (tabs). Presence counts connections unless you dedupe by `auth.id`.
 - Sign in first, then subscribe. The SDK authorizes the SSE client on the first subscribe.
-- The server drops a client that hears nothing for 5 minutes and the SDK reconnects. `PB_CONNECT` fires on every (re)connect. Events sent while the pipe was down are gone.
+- The server drops a client that hears nothing for 5 minutes, and every connection after 30 minutes even if busy (since 0.38.2). The SDK reconnects. `PB_CONNECT` fires on every (re)connect. Events sent while the pipe was down are gone, so a Live screen must reload on `PB_CONNECT`; test it with a session open longer than 30 minutes.
 
 ## Procedure
 
@@ -30,7 +30,8 @@ const rows = new Map()
 const filter = pb.filter('list = {:id}', { id: listId })
 
 async function load() {
-  const list = await pb.collection('items').getFullList({ filter })
+  // requestKey: null — the PB_CONNECT reload can overlap the first load; the SDK would cancel one
+  const list = await pb.collection('items').getFullList({ filter, requestKey: null })
   rows.clear()
   for (const r of list) rows.set(r.id, r)
   render()

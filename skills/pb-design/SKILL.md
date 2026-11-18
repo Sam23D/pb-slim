@@ -4,7 +4,7 @@ description: "Use for 'how should it look', 'make it ours'. Basecoat theme, one 
 license: MIT
 metadata:
   author: sam23d
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # Design: Basecoat base, product personality

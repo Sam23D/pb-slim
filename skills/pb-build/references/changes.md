@@ -1,6 +1,6 @@
 # Changing an app that already has data
 
-Load this from `pb-build` when the approved spec changes a collection that already has rows, or when bumping the PocketBase server. A new collection is `migrations.md`. Every snippet here was run on 0.40.
+Load this from `pb-build` when the approved spec changes a collection that already has rows, or when bumping the PocketBase server. A new collection is `migrations.md`. Every snippet here was run on 0.40 and again on 0.42.
 
 ## Before any change
 
@@ -48,8 +48,8 @@ A new migration that loads the collection, sets the rule, saves (`migrations.md`
 
 ## Bump the PocketBase server
 
-1. Read the release notes between the pinned and the new version. Look for "breaking" and for JS hook API changes.
-2. Change `server` in `pb-build/assets/vendor/VERSIONS.json` and the `PB_VERSION` + `PB_SHA256_*` ARGs in the `Dockerfile` (from the release's `checksums.txt`).
+1. Read the release notes between the pinned and the new version (`https://ganigeorgiev.com/pocketbase/pocketbase/releases`; releases left GitHub in 0.41, and the GitHub API still says 0.40.6 is latest). Look for "breaking", auth or token changes, and JS hook API changes.
+2. Change `server` in `pb-build/assets/vendor/VERSIONS.json` and the `PB_VERSION` + `PB_SHA256_*` ARGs in the `Dockerfile` (from `checksums.txt` next to the zips, at the `download` URL in `VERSIONS.json`).
 3. Back up, `docker compose up -d --build`, confirm `docker compose exec pb /pb/pocketbase --version`.
 4. Run the demo script and each Live screen test. Report what passed on the new version only.
 

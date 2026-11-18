@@ -21,6 +21,8 @@ migrate((app) => {
       { name: "created", type: "autodate", onCreate: true },
       { name: "updated", type: "autodate", onCreate: true, onUpdate: true },
     ],
+    // Index every field the rules or the screens filter or sort on.
+    indexes: ["CREATE INDEX idx_items_owner ON items (owner)"],
   })
   app.save(items)
 
@@ -39,8 +41,32 @@ migrate((app) => {
 ## Rules of thumb
 
 - Always add the two `autodate` fields. Without them `sort=-created` returns 400 and pages hang on "Loading…".
+- Index what rules and screens filter or sort on (`owner`, `household`, `status`). A slow list is almost always a missing index. A unique pair (one membership per user per household) is `CREATE UNIQUE INDEX … ON memberships (household, user)`.
 - Owner-only rows: pin the owner on create, freeze it on update (above).
-- Shared rows (a team, a household): list/view through a membership relation, write by owner or a named role. Add an owner clause so the creator can see the row before any membership row exists.
+- Shared rows (a team, a household): see "Shared rows" below. Add an owner clause where the creator must see a row before any membership row exists.
 - Staff-only writes: `null`, never `""`.
 - Public sign-up: `users.createRule = ""`. Roster for members: list/view `@request.auth.id != ""` and request `fields: "id,name"` so emails stay off the page.
 - Changing a field or a rule on a collection with rows: `changes.md`. A rule change is a new migration that loads the collection, sets the rule, saves. If a boot hook re-applies rules, change both or the hook reverts it.
+
+## Shared rows: a household (checked on 0.42)
+
+Three collections: `households`, `memberships` (`household`, `user`, unique pair), `bills` (`household`, `owner`). Members of a household see and edit its bills; nobody else sees them.
+
+```js
+// rules on bills — a back-relation: one path, one join
+const member = 'household.memberships_via_household.user ?= @request.auth.id'
+bills.listRule = member
+bills.viewRule = member
+bills.createRule = '@request.auth.id != "" && @request.body.owner = @request.auth.id && @request.body.household.memberships_via_household.user ?= @request.auth.id'
+bills.updateRule = member + ' && @request.body.household:changed = false && @request.body.owner:changed = false'
+bills.deleteRule = 'owner = @request.auth.id'
+```
+
+- `<collection>_via_<field>` walks back from the household to its memberships. Use it instead of two `@collection.memberships…` clauses: it reads as one sentence and cannot be split into two unrelated rows.
+- The create rule checks the household **in the request body**, so a member cannot add a bill to someone else's household.
+- Freeze `household` on update, or a member could move a bill into a household they do not belong to.
+- Prove it with the two-client proof (`pb-audit/references/checks.md`): a member of another household gets an empty list, 404 on view and update, 400 on create.
+
+## Totals: a view collection
+
+A view collection is a read-only SQL `SELECT` (balances, counts, sums). Give it the same list/view rule idea as the rows it sums. It gets **no realtime events**, so a Live screen cannot watch it: watch the underlying collection and reload the view on each event.

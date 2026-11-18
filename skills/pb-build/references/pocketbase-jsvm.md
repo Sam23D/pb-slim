@@ -6,6 +6,10 @@ Top-level `function foo()` in a `pb_hooks/*.pb.js` file is **not** in scope insi
 
 Put helpers in a module **without** `.pb.` in the name and `require` it **inside each handler**:
 
+- One module per domain (`pb_hooks/bills.js`, `pb_hooks/presence.js`), not one big `utils.js`.
+- Keep the logic in plain functions with simple inputs and outputs (`splitBill(app, bill)`); the hook only calls them. Then you can call the same function from a cron, a custom route, or a one-off check.
+- Loaded modules share one registry across runtimes: export functions, never mutable state.
+
 ```js
 // pb_hooks/shares.js
 module.exports = { writeShares: function (app, record) { /* ... */ } }

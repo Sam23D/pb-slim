@@ -1,11 +1,11 @@
 # One PocketBase, dev and prod. Version and sha256 must match pb-build/assets/vendor/VERSIONS.json (server).
 FROM alpine:3.22
-ARG PB_VERSION=0.40.6
-ARG PB_SHA256_amd64=0e1f609158ed945f809f8a02ae012aa0427129c66ebb63c1aee76f2c0309373f
-ARG PB_SHA256_arm64=d22c66ceb67ca92b7d767f36d826e848a276bcfa3c197ead20bf87c42208984f
+ARG PB_VERSION=0.42.3
+ARG PB_SHA256_amd64=89b1ded352404c648dd92c2d884fc8ff7858138697cb1ccb52722ccaa0bbd2a9
+ARG PB_SHA256_arm64=f2af25259c5565e856aac5907a8fd9a7ce01d18375ac70b18121c9d41fd56dbe
 ARG TARGETARCH
 RUN apk add --no-cache ca-certificates unzip \
- && wget -qO /tmp/pb.zip "https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${TARGETARCH}.zip" \
+ && wget -qO /tmp/pb.zip "https://ganigeorgiev.com/meta/pocketbase/pocketbase/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${TARGETARCH}.zip" \
  && eval "sha=\$PB_SHA256_${TARGETARCH}" && echo "${sha}  /tmp/pb.zip" | sha256sum -c - \
  && unzip -q /tmp/pb.zip pocketbase -d /pb && rm /tmp/pb.zip
 WORKDIR /pb

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.8.0 — 2026-11-17
+
+PocketBase 0.42, and fixes for what it changed. Patterns from the PocketBase docs, checked on a running 0.42.3.
+
+- **Server 0.42.3 from the new host.** PocketBase releases left GitHub in 0.41; the GitHub API still reports 0.40.6 as latest. `VERSIONS.json` and the `Dockerfile` now download from `ganigeorgiev.com` and check the new zips' sha256. `changes.md` says where to find releases and checksums.
+- **Stale sign-in.** Since 0.42 an unknown or expired token gets 401 on every endpoint, public ones too. `app.js` now drops the token on 401 and sends the user home, instead of leaving every request failing.
+- **Cancelled requests.** The SDK cancels the first of two identical concurrent requests (status 0), which `errorMessage` used to show as "No connection". It now returns `null` for those, `toast(null)` shows nothing, and `load()` in `data.md` and `realtime.md` passes `requestKey: null`.
+- `realtime.md`: connections are also closed after 30 minutes (since 0.38.2); test Live screens past that.
+- `migrations.md`: an index in the migration shape; a household example with membership rules through a back-relation (members only; create checks the household in the body; household frozen on update); view collections for totals.
+- `data.md`: `fields` for lists, `skipTotal` for long lists.
+- `pb-spec`: a Live screen cannot watch a view collection; watch what it sums.
+- `pb-deploy`: superuser IP allowlist and MFA in the settings list; optional settings encryption and `GOMEMLIMIT`.
+- `pocketbase-jsvm.md`: one hook module per domain, logic in plain functions.
+
 ## 0.7.0 — 2026-11-17
 
 Starter that runs as shipped, coverage for apps with data, and a pack check.

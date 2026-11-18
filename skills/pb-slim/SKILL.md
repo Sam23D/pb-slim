@@ -4,7 +4,7 @@ description: "Use when starting or growing a small PocketBase web app or PWA wit
 license: MIT
 metadata:
   author: sam23d
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # PB Slim

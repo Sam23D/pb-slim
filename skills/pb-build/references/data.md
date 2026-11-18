@@ -6,6 +6,11 @@ The default for every screen. `pocketbase.umd.js` is vendored by the starter and
 
 The starter's `js/app.js` already makes it: `const pb = new PocketBase(location.origin)`, also on `window.pb`. It also holds the auth guard, `errorMessage(err)`, and `toast(title, category)`. Keep them; add screen code in `js/<page>.js`.
 
+Two things `app.js` already handles, so screens do not:
+
+- **Stale sign-in.** Since PocketBase 0.42 an expired or revoked token gets 401 on every request, public ones too. `app.js` drops the token and sends the user home.
+- **Cancelled requests.** The SDK cancels a pending request when an identical one starts (a double click, a reload on reconnect). The cancelled one rejects with `isAbort`; `errorMessage` returns `null` for it and `toast(null)` shows nothing. Loads that may overlap pass `requestKey: null` so both finish.
+
 The SDK keeps the auth token in `localStorage`, so a reload stays signed in. `pb.authStore.isValid` tells you whether to show the sign-in screen.
 
 ## Sign in, sign up
@@ -28,7 +33,8 @@ await pb.collection('items').update(id, { done: true })
 await pb.collection('items').delete(id)
 ```
 
-- Use `getList(page, perPage)` past a few hundred rows.
+- Use `getList(page, perPage, { skipTotal: true })` past a few hundred rows (`skipTotal` saves a count query when the screen shows no total).
+- Ask only for the fields the screen shows: `fields: 'id,title,done'`. Use the same `fields` on the Live subscription.
 - `filter` and `sort` strings go through `pb.filter('owner = {:id}', { id })` so user input cannot change the query.
 - Expand only what the screen shows: `expand: 'owner'` returns `record.expand.owner`. Expanded rows follow that collection's view rule.
 - Photos: send a `FormData` or a `File` in the record. URL: `pb.files.getURL(record, record.photo)`. Private files are marked Protected and need `pb.files.getToken()` (`pb-audit/references/checks.md`).
@@ -57,7 +63,11 @@ Keep the screen's rows in a `Map` keyed by id. One `render()` reads that map and
 const rows = new Map()
 
 async function load() {
-  const list = await pb.collection('items').getFullList({ filter: pb.filter('owner = {:id}', { id: me }) })
+  const list = await pb.collection('items').getFullList({
+    filter: pb.filter('owner = {:id}', { id: me }),
+    fields: 'id,title',
+    requestKey: null,   // a reload on reconnect may overlap the first load; let both finish
+  })
   rows.clear()
   for (const r of list) rows.set(r.id, r)
   render()

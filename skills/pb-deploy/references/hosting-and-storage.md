@@ -30,6 +30,12 @@ fly certs add <app.example.com>             # custom domain; then the DNS record
 3. **Backups:** cron `0 3 * * *`, keep 7, **S3 on**, pointing at the backup bucket (not the files bucket). Press **Create backup** once and check the file is in the bucket.
 4. **Rate limits:** turn on (off by default).
 5. **Files storage:** S3 only when uploads get large; a different bucket from backups.
+6. **Superuser lock-down:** Settings → Application → Superuser IPs (your own IP; a stolen admin token then gets 403), and MFA + OTP on `_superusers`. Locked out: `fly ssh console -C "/pb/pocketbase superuser ips"` clears the list.
+
+## Optional hardening
+
+- **Encrypt stored settings** when backups leave the machine (they otherwise carry the SMTP and S3 passwords in plain text): `fly secrets set PB_ENCRYPTION_KEY=$(openssl rand -hex 16)` (32 characters), and add `"--encryptionEnv=PB_ENCRYPTION_KEY"` to the `CMD` in the `Dockerfile`. Keep the key somewhere safe: without it the settings cannot be read.
+- **Small machines:** set `GOMEMLIMIT` a little under the Machine's memory (`[env] GOMEMLIMIT = "200MiB"` in `fly.toml` for 256 MB). Large photo uploads and thumbnails are the usual out-of-memory cause.
 
 ## Do not use Turso / remote databases
 

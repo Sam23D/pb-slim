@@ -4,7 +4,7 @@ description: "Use for 'users should…', 'write the spec', 'what does the app do
 license: MIT
 metadata:
   author: sam23d
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # Spec
@@ -43,7 +43,7 @@ Mark a screen Live only when **someone else changes that data while the user is 
 
 For each Live screen, the spec says:
 
-- **Watches:** the one collection (or the one record) the screen shows, and the filter. One screen, one subscription.
+- **Watches:** the one collection (or the one record) the screen shows, and the filter. One screen, one subscription. A view collection (totals, balances) sends no live events: watch the collection it sums and reload the view.
 - **Who else writes it:** the role, in words.
 - **Test:** two sessions, two members. A changes it. B sees it without touching the page, within a second. Then B reloads and sees the same thing.
 
