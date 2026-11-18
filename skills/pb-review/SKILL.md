@@ -4,7 +4,7 @@ description: "Use for 'review', 'is this too much', 'what is missing'. Ship / cu
 license: MIT
 metadata:
   author: sam23d
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
 # Review

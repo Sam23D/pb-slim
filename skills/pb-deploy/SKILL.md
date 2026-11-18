@@ -4,7 +4,7 @@ description: "Use for 'put it online', 'deploy', backups, email, uptime. One alw
 license: MIT
 metadata:
   author: sam23d
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
 # Online

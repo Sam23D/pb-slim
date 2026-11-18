@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.7.0 — 2026-11-17
 
 Starter that runs as shipped, coverage for apps with data, and a pack check.
 

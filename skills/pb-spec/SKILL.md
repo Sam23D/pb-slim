@@ -4,7 +4,7 @@ description: "Use for 'users should…', 'write the spec', 'what does the app do
 license: MIT
 metadata:
   author: sam23d
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
 # Spec

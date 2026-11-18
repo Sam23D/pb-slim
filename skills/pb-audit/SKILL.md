@@ -4,7 +4,7 @@ description: "Use for 'is this safe', 'who can see this', 'credentials'. Securit
 license: MIT
 metadata:
   author: sam23d
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
 # Security audit
